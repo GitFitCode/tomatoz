@@ -1,35 +1,31 @@
 {
+  "compileOnSave": false,
   "compilerOptions": {
-      "module": "esnext",
-      "target": "es2017",
+      "outDir": "./dist/out-tsc",
+      "module": "ESNext",
+      "target": "es2015",
       "moduleResolution": "node",
-      "experimentalDecorators": true,
+      "sourceMap": true,
+      "declaration": false,
       "emitDecoratorMetadata": true,
+      "experimentalDecorators": true,
       "noEmitHelpers": true,
       "noEmitOnError": true,
       "skipLibCheck": true,
       "lib": [
-        "es2018", "es2017", "dom", "es6"
+          "es2017",
+          "dom",
+          "es6"
       ],
       "baseUrl": ".",
       "paths": {
-          "~/*": [
-              "app/*"
+          "@src/*": [
+              "src/*.android.ts",
+              "src/*.ios.ts",
+              "src/*.tns.ts",
+              "src/*.web.ts",
+              "src/*.ts"
           ]
       }
-  },
-  "include": [
-    "src/tests/**/*.ts",
-    "src/**/*.ios.ts",
-    "src/**/*.android.ts"
-  ],
-  "files": [
-    "./references.d.ts",
-    "./src/main.ts"
-  ],
-  "exclude": [
-      "node_modules",
-      "platforms",
-      "e2e"
-  ]
+  }
 }
