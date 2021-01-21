@@ -9,9 +9,10 @@
       "declaration": false,
       "emitDecoratorMetadata": true,
       "experimentalDecorators": true,
-      "noEmitHelpers": true,
+      "noEmitHelpers": false,
       "noEmitOnError": true,
       "skipLibCheck": true,
+      "isolatedModules": false,
       "lib": [
           "es2017",
           "dom",

@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="271.27" height="241.725" viewBox="0 0 271.27 241.725">
+  <defs>
+    <style>
+      .cls-1, .cls-2, .cls-3, .cls-5 {
+        fill: none;
+      }
+
+      .cls-2 {
+        stroke: #101426;
+      }
+
+      .cls-2, .cls-3, .cls-5 {
+        stroke-miterlimit: 10;
+      }
+
+      .cls-2, .cls-5 {
+        stroke-width: 6px;
+      }
+
+      .cls-3 {
+        stroke: #ff4866;
+        stroke-width: 11px;
+      }
+
+      .cls-4 {
+        fill: #ff4866;
+        opacity: 0.484;
+      }
+
+      .cls-5 {
+        stroke: #43ffe2;
+      }
+
+      .cls-6 {
+        filter: url(#Path_3);
+      }
+    </style>
+    <filter id="Path_3" x="0" y="24.608" width="217.14" height="217.117" filterUnits="userSpaceOnUse">
+      <feOffset input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feFlood flood-color="#ff4866" flood-opacity="0.424"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g id="Component_11_1" data-name="Component 11 – 1" transform="translate(17.513 4.219)">
+    <g id="Component_4_3" data-name="Component 4 – 3" transform="translate(0 2.753)">
+      <line id="Line_2" data-name="Line 2" class="cls-1" x1="24.579" transform="translate(144.377 85.782)"/>
+      <path id="Path_21" data-name="Path 21" class="cls-1" d="M-65.69,209.763v69.573h-70.686" transform="translate(315.446 -193.555)"/>
+      <g id="Component_2_1" data-name="Component 2 – 1">
+        <path id="Subtraction_4" data-name="Subtraction 4" class="cls-2" d="M981.145-1268.676h0a90.707,90.707,0,0,0-14.308-11.221l21.543-26.6-9.851-7.978c-3.844-3.114-4.247-6.945-1.134-10.788l.557-.688c1.724-2.129,3.65-3.208,5.727-3.208a8.121,8.121,0,0,1,5.061,2.075l9.851,7.978,23.9,19.352a7.738,7.738,0,0,1,3.177,5.12,7.734,7.734,0,0,1-2.043,5.668l-.557.689c-1.724,2.129-3.65,3.208-5.727,3.208a8.12,8.12,0,0,1-5.061-2.075l-9.767-7.909-21.363,26.382Z" transform="translate(-827.056 1329.163)"/>
+        <g class="cls-6" transform="matrix(1, 0, 0, 1, -17.51, -6.97)">
+          <path id="Path_3-2" data-name="Path 3" class="cls-3" d="M-174.516,206.622a91.079,91.079,0,0,1-92.652,67.584,91.364,91.364,0,0,1-18.687-2.942A91.026,91.026,0,0,1-350.5,159.934,91.065,91.065,0,0,1-266.266,92.3a91.689,91.689,0,0,1,13.4.446,90.464,90.464,0,0,1,13.7,2.546A91.038,91.038,0,0,1-174.516,206.622Z" transform="translate(371.08 -50.12)"/>
+        </g>
+        <line id="Line_1" data-name="Line 1" class="cls-1" x1="24.579" transform="translate(148.377 203.782)"/>
+        <path id="Path_11" data-name="Path 11" class="cls-1" d="M-65.69,209.763v69.573h-70.686" transform="translate(319.446 -75.555)"/>
+      </g>
+      <path id="Path_10" data-name="Path 10" class="cls-4" d="M-238.778,269.692a69.7,69.7,0,0,0,61.55-64.293,5.16,5.16,0,0,1,4.516-4.821,5.066,5.066,0,0,1,5.6,5.013c0,.11,0,.228-.008.337a79.839,79.839,0,0,1-70.518,73.821,5.068,5.068,0,0,1-5.624-4.761h0A5.055,5.055,0,0,1-238.778,269.692Z" transform="translate(335.239 -79.107)"/>
+      <path id="Path_11-2" data-name="Path 11" class="cls-1" d="M-65.69,209.763v69.573h-70.686" transform="translate(319.446 -79.555)"/>
+      <ellipse id="Ellipse_1" data-name="Ellipse 1" class="cls-4" cx="4.386" cy="4.386" rx="4.386" ry="4.386" transform="translate(158.736 105.298)"/>
+    </g>
+    <path id="Path_45" data-name="Path 45" class="cls-5" d="M-258.551,154.288v16.226h-12.677c-4.948,0-7.67-2.723-7.67-7.67v-.885c0-4.948,2.723-7.67,7.67-7.67Z" transform="translate(469.563 55.613) rotate(39)"/>
+  </g>
+</svg>

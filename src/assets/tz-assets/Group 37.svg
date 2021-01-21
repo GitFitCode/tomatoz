@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="22.5" height="4.999" viewBox="0 0 22.5 4.999">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #222b45;
+      }
+
+      .cls-2 {
+        fill: #fff;
+      }
+
+      .cls-3 {
+        clip-path: url(#clip-path);
+      }
+    </style>
+    <clipPath id="clip-path">
+      <path id="Mask" class="cls-1" d="M-17.5,2.5A2.5,2.5,0,0,0-20,0a2.5,2.5,0,0,0-2.5,2.5A2.5,2.5,0,0,0-20,5,2.5,2.5,0,0,0-17.5,2.5Zm8.75,0A2.5,2.5,0,0,0-11.25,0a2.5,2.5,0,0,0-2.5,2.5A2.5,2.5,0,0,0-11.25,5,2.5,2.5,0,0,0-8.75,2.5ZM0,2.5A2.5,2.5,0,0,0-2.5,0,2.5,2.5,0,0,0-5,2.5,2.5,2.5,0,0,0-2.5,5,2.5,2.5,0,0,0,0,2.5Z" transform="rotate(180)"/>
+    </clipPath>
+  </defs>
+  <g id="Group_37" data-name="Group 37" transform="translate(-1038.75 -65)">
+    <g id="_22_Icons_Filled_Star" data-name="22) Icons/Filled/Star" transform="translate(1065 52.5) rotate(180)">
+      <path id="Mask-2" data-name="Mask" class="cls-2" d="M-17.5,2.5A2.5,2.5,0,0,0-20,0a2.5,2.5,0,0,0-2.5,2.5A2.5,2.5,0,0,0-20,5,2.5,2.5,0,0,0-17.5,2.5Zm8.75,0A2.5,2.5,0,0,0-11.25,0a2.5,2.5,0,0,0-2.5,2.5A2.5,2.5,0,0,0-11.25,5,2.5,2.5,0,0,0-8.75,2.5ZM0,2.5A2.5,2.5,0,0,0-2.5,0,2.5,2.5,0,0,0-5,2.5,2.5,2.5,0,0,0-2.5,5,2.5,2.5,0,0,0,0,2.5Z" transform="translate(3.75 -12.5) rotate(180)"/>
+    </g>
+  </g>
+</svg>
