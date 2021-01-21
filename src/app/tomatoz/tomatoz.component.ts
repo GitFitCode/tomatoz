@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-tomatoz',
-  templateUrl: './tomatoz.svg',
+  templateUrl: './tomatoz.component.html',
   styleUrls: ['./tomatoz.component.scss']
 })
 export class TomatozComponent implements OnInit {
