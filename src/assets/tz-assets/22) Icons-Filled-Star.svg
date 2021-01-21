@@ -1,0 +1,28 @@
+<svg id="_22_Icons_Filled_Star" data-name="22) Icons/Filled/Star" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="30" height="30" viewBox="0 0 30 30">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #222b45;
+      }
+
+      .cls-2 {
+        fill: rgba(0,0,0,0);
+      }
+
+      .cls-3 {
+        fill: #fff;
+      }
+
+      .cls-4 {
+        clip-path: url(#clip-path);
+      }
+    </style>
+    <clipPath id="clip-path">
+      <path id="_Icon_Color" data-name="🎨 Icon Color" class="cls-1" d="M-1.25,17.5A1.25,1.25,0,0,0,0,16.25,1.25,1.25,0,0,0-1.25,15h-20a1.25,1.25,0,0,0-1.25,1.25A1.25,1.25,0,0,0-21.25,17.5Zm0-7.5A1.25,1.25,0,0,0,0,8.75,1.249,1.249,0,0,0-1.25,7.5h-20A1.249,1.249,0,0,0-22.5,8.75,1.25,1.25,0,0,0-21.25,10Zm0-7.5A1.249,1.249,0,0,0,0,1.25,1.249,1.249,0,0,0-1.25,0h-20A1.249,1.249,0,0,0-22.5,1.25,1.249,1.249,0,0,0-21.25,2.5Z" transform="rotate(180)"/>
+    </clipPath>
+  </defs>
+  <g id="_22_Icons_Filled_Star-2" data-name="22) Icons/Filled/Star" transform="translate(30) rotate(180)">
+    <rect id="_22_Icons_Filled_Star_background" data-name="22) Icons/Filled/Star background" class="cls-2" width="30" height="30" transform="translate(30) rotate(180)"/>
+    <path id="_Icon_Color-2" data-name="🎨 Icon Color" class="cls-3" d="M-1.25,17.5A1.25,1.25,0,0,0,0,16.25,1.25,1.25,0,0,0-1.25,15h-20a1.25,1.25,0,0,0-1.25,1.25A1.25,1.25,0,0,0-21.25,17.5Zm0-7.5A1.25,1.25,0,0,0,0,8.75,1.249,1.249,0,0,0-1.25,7.5h-20A1.249,1.249,0,0,0-22.5,8.75,1.25,1.25,0,0,0-21.25,10Zm0-7.5A1.249,1.249,0,0,0,0,1.25,1.249,1.249,0,0,0-1.25,0h-20A1.249,1.249,0,0,0-22.5,1.25,1.249,1.249,0,0,0-21.25,2.5Z" transform="translate(3.75 -6.25) rotate(180)"/>
+  </g>
+</svg>

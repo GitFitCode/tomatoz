@@ -1,0 +1,11 @@
+<svg id="Component_9_3" data-name="Component 9 – 3" xmlns="http://www.w3.org/2000/svg" width="17.5" height="22.5" viewBox="0 0 17.5 22.5">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fff;
+      }
+    </style>
+  </defs>
+  <path id="Union_1" data-name="Union 1" class="cls-1" d="M1.25,10a1.25,1.25,0,1,1,0-2.5h20a1.25,1.25,0,0,1,0,2.5Zm2.6-7.5c-.377,0-.682-.56-.682-1.25S3.476,0,3.853,0H14.776c.377,0,.682.56.682,1.25s-.305,1.25-.682,1.25Z" transform="translate(17.5) rotate(90)"/>
+  <path id="Shape" class="cls-1" d="M.839,2.5C.376,2.5,0,1.94,0,1.25S.376,0,.839,0H14.268c.464,0,.839.56.839,1.25s-.376,1.25-.839,1.25Z" transform="translate(2.5 2.036) rotate(90)"/>
+</svg>
