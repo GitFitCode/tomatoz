@@ -34,11 +34,20 @@ export class Timer {
   }
 
   start() {
-
+    if (
+      this.stateSubj.value === 'ready' ||
+      this.stateSubj.value === 'paused'
+    ) {
+      this.run$.next(true);
+      this.stateSubj.next('running');
+    }
   }
 
   paused() {
-
+    if (this.stateSubj.value === 'running') {
+      this.run$.next(false);
+      this.stateSubj.next('paused');
+    }
   }
 
   reset(): void {
