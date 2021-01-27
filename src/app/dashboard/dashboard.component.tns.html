@@ -1,1 +1,34 @@
-<Button text="dashboard works!" class="btn btn-primary"></Button>
+<StackLayout
+  orientation="vertical">
+  <FlexboxLayout
+    flexDirection="column"
+    height="100%"
+    justifyContent="space-between"
+    alignItems="stretch">
+    <FlexboxLayout
+      [ngClass]="'digital-clock'"
+      flexDirection="row"
+      justifyContent="center"
+      alignSelf="center">
+      <app-digital-clock [timer]="workTimer">
+      </app-digital-clock>
+    </FlexboxLayout>
+    <FlexboxLayout
+      [ngClass]="'logo-container'"
+      flexDirection="row"
+      justifyContent="center"
+      alignSelf="center">
+      <app-tomatoz></app-tomatoz>
+    </FlexboxLayout>
+    <FlexboxLayout
+      flexDirection="row"
+      justifyContent="center"
+      alignItems="center">
+      <Label
+        [ngClass]="'app-description'"
+        text="a pomodoro app"
+        alignSelf="flex-end">
+      </Label>
+    </FlexboxLayout>
+  </FlexboxLayout>
+</StackLayout>

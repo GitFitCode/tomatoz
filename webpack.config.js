@@ -137,6 +137,11 @@ module.exports = (env) => {
       noErrorOnMissing: true,
       globOptions: { dot: false, ...copyIgnore },
     },
+    {
+      from: '**/*.svg',
+      noErrorOnMissing: true,
+      globOptions: { dot: false, ...copyIgnore },
+    },
   ];
 
   if (!production) {
