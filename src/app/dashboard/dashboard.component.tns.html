@@ -6,6 +6,14 @@
     justifyContent="space-between"
     alignItems="stretch">
     <FlexboxLayout
+      [ngClass]="'digital-clock'"
+      flexDirection="row"
+      justifyContent="center"
+      alignSelf="center">
+      <app-digital-clock [timer]="workTimer">
+      </app-digital-clock>
+    </FlexboxLayout>
+    <FlexboxLayout
       [ngClass]="'logo-container'"
       flexDirection="row"
       justifyContent="center"

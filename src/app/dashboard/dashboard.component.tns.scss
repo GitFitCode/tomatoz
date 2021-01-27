@@ -1,7 +1,7 @@
 /* Add mobile styles for the component here.  */
 .logo-container {
-  margin-top: 500px;
-  margin-left: 50px;
+  margin-top: 50;
+  margin-left: 20;
 }
 
 .app-description {
@@ -10,4 +10,13 @@
   font-display: auto;
   font-style: normal;
   font-weight: 200;
+}
+
+.digital-clock {
+  margin-top: 150;
+  font-size: 42;
+  font-family: "filson-soft",sans-serif;
+  font-display: auto;
+  font-style: normal;
+  font-weight: 500;
 }

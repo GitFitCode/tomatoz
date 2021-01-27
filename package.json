@@ -27,6 +27,7 @@
     "@nativescript/angular": "~11.0.0",
     "@nativescript/core": "~7.1.0",
     "@nativescript/theme": "~3.0.0",
+    "@ngrx/store": "^1.2.1",
     "@sergeymell/nativescript-svg": "^1.0.5",
     "core-js": "^3.8.0",
     "ng-inline-svg": "^11.0.2",

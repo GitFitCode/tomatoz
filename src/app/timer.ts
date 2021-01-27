@@ -88,7 +88,7 @@ export class Timer {
     this.ngUnsubscribe.complete();
   }
 
-  generateTimer() {
+  private generateTimer() {
     return this.run$.asObservable().pipe(
       switchMap(run => run ? this.currentInterval$ : EMPTY),
       scan((acc, curr) => (curr ? curr + acc : acc), this.currentDuration),
