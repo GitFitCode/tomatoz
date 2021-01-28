@@ -10,6 +10,7 @@ import { DashboardComponent } from '@src/app/dashboard/dashboard.component';
 import { HttpClientModule } from '@angular/common/http';
 import { DigitalClockComponent } from '@src/app/dashboard/digital-clock/digital-clock.component';
 import { SettingsComponent } from '@src/app/dashboard/settings/settings.component';
+import { ControlsComponent } from '@src/app/dashboard/controls/controls.component';
 
 
 
@@ -20,6 +21,7 @@ import { SettingsComponent } from '@src/app/dashboard/settings/settings.componen
     DashboardComponent,
     DigitalClockComponent,
     SettingsComponent,
+    ControlsComponent,
   ],
   imports: [
     BrowserModule,

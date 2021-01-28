@@ -1,0 +1,21 @@
+/* Add mobile styles for the component here.  */
+*, .control-btn {
+  background-color: #101426;
+}
+
+.control-btn {
+  border-width: 6;
+  width: 285;
+  height: 68.67;
+  border-radius: 50;
+  font-size: 33;
+  font-family: "urbane-rounded",sans-serif;
+  font-display:auto;
+  font-style:normal;
+  font-weight:300;
+}
+
+.ready {
+  border-color: #43FFe2;
+  color: #43FFe2;
+}

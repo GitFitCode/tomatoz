@@ -11,6 +11,7 @@ import { DigitalClockComponent } from '@src/app/dashboard/digital-clock/digital-
 import { SettingsComponent } from '@src/app/dashboard/settings/settings.component';
 // Uncomment and add to NgModule imports if you need to use two-way binding and/or HTTP wrapper
 import { NativeScriptFormsModule, NativeScriptHttpClientModule } from '@nativescript/angular';
+import { ControlsComponent } from '@src/app/dashboard/controls/controls.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { NativeScriptFormsModule, NativeScriptHttpClientModule } from '@nativesc
     DashboardComponent,
     DigitalClockComponent,
     SettingsComponent,
+    ControlsComponent,
   ],
   imports: [
     NativeScriptModule,
