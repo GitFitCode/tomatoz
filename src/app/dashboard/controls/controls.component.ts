@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'app-controls',
@@ -6,7 +6,17 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./controls.component.scss']
 })
 export class ControlsComponent implements OnInit {
-  controlBtnText: string = 'START';
+  startControlBtnText: string = 'START';
+
+
+  @Input() showResume = true;
+  @Input() showPaused = true;
+  @Input() showStop = true;
+
+  @Output() started = new EventEmitter();
+  @Output() paused = new EventEmitter();
+  @Output() stopped = new EventEmitter();
+
   constructor() { }
 
   ngOnInit(): void {
@@ -16,4 +26,7 @@ export class ControlsComponent implements OnInit {
     return 'control-btn ready'
   }
 
+  onStartedClicked() {
+    this.started.emit()
+  }
 }

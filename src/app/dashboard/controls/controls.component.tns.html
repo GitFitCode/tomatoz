@@ -1,5 +1,6 @@
 <Button
   [ngClass]="getControlBtnStyle()"
-  text="{{ controlBtnText }}"
-  class="btn btn-primary">
+  text="{{ startControlBtnText }}"
+  class="btn btn-primary"
+  (tap)="onStartedClicked()">
 </Button>
