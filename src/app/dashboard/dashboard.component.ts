@@ -1,6 +1,6 @@
 import { takeUntil } from 'rxjs/operators';
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { TomatozService } from '../shared/services/tomatoz.service';
 import { state, Timer } from '../timer';
 
@@ -10,12 +10,14 @@ import { state, Timer } from '../timer';
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit, OnDestroy {
+  stopControlBtnText: string = 'Reset';
   workTimer: Timer;
   private ngUnsubscribe = new Subject<void>();
 
   // TODO: Handle this via an observable instead
   // TODO: Use an enum instead
   timerState: string;
+  timerState$: Observable<state>;
 
   constructor(
     private tomatozSrv: TomatozService,
@@ -24,11 +26,22 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.workTimer = this.tomatozSrv.workTimer;
+    this.timerState$ = this.workTimer.getStateObservable();
+    this.getCurrentTimerState();
     this.tomatozSrv.reloadSettings();
+  }
+
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
+  }
+
+  getCurrentTimerState() {
     this.tomatozSrv
       .getState()
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((currentState) => {
+        console.log(`State: ${currentState}`)
         this.timerState = currentState;
         this.onStateChange();
         // TODO: Use this value to determine which timer is being used
@@ -40,13 +53,19 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.cdRef.detectChanges();
   }
 
-  ngOnDestroy(): void {
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
-  }
-
   onStarted() {
     this.workTimer.start();
   }
 
+  onPaused() {
+    this.workTimer.paused();
+  }
+
+  onStopped() {
+    this.workTimer.reset();
+  }
+
+  getStoppedControlBtnStyle() {
+    return 'reset';
+  }
 }

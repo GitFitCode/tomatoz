@@ -7,26 +7,37 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 })
 export class ControlsComponent implements OnInit {
   startControlBtnText: string = 'START';
+  pauseControlBtnText: string = 'PAUSE';
 
-
-  @Input() showResume = true;
-  @Input() showPaused = true;
-  @Input() showStop = true;
+  @Input() showStart = false;
+  @Input() showPause = false;
 
   @Output() started = new EventEmitter();
   @Output() paused = new EventEmitter();
-  @Output() stopped = new EventEmitter();
 
   constructor() { }
 
   ngOnInit(): void {
   }
 
-  getControlBtnStyle() {
-    return 'control-btn ready'
+  /**
+   * NOTE: Maybe this should be one method?
+   * Just separting it to keep btns separated
+   */
+
+  getStartedControlBtnStyle() {
+    return 'control-btn ready';
+  }
+
+  getPausedControlBtnStyle() {
+    return 'control-btn paused';
   }
 
   onStartedClicked() {
-    this.started.emit()
+    this.started.emit();
+  }
+
+  onPausedClicked() {
+    this.paused.emit();
   }
 }

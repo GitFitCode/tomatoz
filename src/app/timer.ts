@@ -50,6 +50,9 @@ export class Timer {
     }
   }
 
+  /** NOTE: This can be thought of as the same as STOP. If its confusing
+   * we can update the name so there is a single name
+   */
   reset(): void {
     const timeState = this.stateSubj.value;
     if (timeState !== 'reset' && timeState !== 'ready') {

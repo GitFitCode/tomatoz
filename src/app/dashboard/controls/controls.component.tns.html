@@ -1,6 +1,14 @@
 <Button
-  [ngClass]="getControlBtnStyle()"
+  *ngIf="showStart"
+  [ngClass]="getStartedControlBtnStyle()"
   text="{{ startControlBtnText }}"
   class="btn btn-primary"
   (tap)="onStartedClicked()">
+</Button>
+<Button
+  *ngIf="showPause"
+  [ngClass]="getPausedControlBtnStyle()"
+  text="{{ pauseControlBtnText }}"
+  class="btn btn-primary"
+  (tap)="onPausedClicked()">
 </Button>

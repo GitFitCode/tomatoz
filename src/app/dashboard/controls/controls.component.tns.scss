@@ -9,13 +9,19 @@
   height: 68.67;
   border-radius: 50;
   font-size: 33;
-  font-family: "urbane-rounded",sans-serif;
-  font-display:auto;
-  font-style:normal;
-  font-weight:300;
+  font-family: "filson-soft",sans-serif;
+  font-display: auto;
+  font-style: normal;
+  font-weight: 700;
 }
 
 .ready {
   border-color: #43FFe2;
   color: #43FFe2;
+}
+
+.paused, .running {
+  border-color: #FF4866;
+  background-color: #FF4866;
+  color: #FFFFFF
 }
