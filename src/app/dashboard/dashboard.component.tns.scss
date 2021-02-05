@@ -2,6 +2,28 @@
 * {
   background-color: #101426;
 }
+
+.dasboard-toolbar, .timer-running {
+  background-color: #FF4866;
+}
+
+.timer-ready {
+  background-color: #43FFE2;
+}
+
+.dark-bg {
+  background-color: #101426;
+}
+
+.settings-controls {
+  margin: 25;
+}
+
+.dashboard-card-container {
+  border-top-left-radius: 40;
+  border-top-right-radius: 40;
+}
+
 .app-description {
   font-size: 38;
   font-family: "filson-soft",sans-serif;

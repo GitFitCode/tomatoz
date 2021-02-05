@@ -1,15 +1,40 @@
 <StackLayout
-  orientation="vertical">
+  orientation="vertical"
+  [ngClass]="getDashboardBackgroundStyle(status)"
+  *ngIf="timerState$ | async as status">
   <FlexboxLayout
-    *ngIf="timerState$ | async as status"
+    flexDirection="row"
+    justifyContent="space-between"
+    height="26"
+    [ngClass]="getSettingsBackdropStyle(status)">
+  <StackLayout backgroundColor="transparent">
+    <SVGImage
+      backgroundColor="transparent"
+      src="~/assets/tz-assets/asset-1.svg"
+      width="30"
+      height="30">
+    </SVGImage>
+  </StackLayout>
+  <StackLayout backgroundColor="transparent">
+    <SVGImage
+      backgroundColor="transparent"
+      src="~/assets/tz-assets/options.svg"
+      width="22.5"
+      height="4.999"
+      style="margin-top: 5;">
+    </SVGImage>
+  </StackLayout>
+  </FlexboxLayout>
+  <FlexboxLayout
     flexDirection="column"
     height="100%"
     justifyContent="space-between"
-    alignItems="stretch">
+    alignItems="stretch"
+    [ngClass]="'dark-bg dashboard-card-container'">
     <FlexboxLayout
       [ngClass]="'digital-clock'"
       flexDirection="row"
-      justifyContent="center"
+      justifyContent="flex-start"
       alignSelf="center">
       <app-digital-clock
         [timer]="workTimer">

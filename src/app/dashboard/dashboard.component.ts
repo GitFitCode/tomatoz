@@ -68,4 +68,20 @@ export class DashboardComponent implements OnInit, OnDestroy {
   getStoppedControlBtnStyle() {
     return 'reset';
   }
+
+  getDashboardBackgroundStyle(status: string) {
+    if (status !== 'running') {
+      return 'timer-ready';
+    } else {
+      return 'timer-running';
+    }
+  }
+
+  getSettingsBackdropStyle(status: string) {
+    if (status !== 'running') {
+      return 'timer-ready settings-controls';
+    } else {
+      return 'timer-running settings-controls';
+    }
+  }
 }

@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { InlineSVGModule } from 'ng-inline-svg';
-import { StoreModule } from '@ngrx/store';
 
 import { AppRoutingModule } from '@src/app/app-routing.module';
 import { AppComponent } from '@src/app/app.component';
@@ -27,7 +26,6 @@ import { ControlsComponent } from '@src/app/dashboard/controls/controls.componen
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    StoreModule.forFeature('dashboard', ),
     InlineSVGModule.forRoot({
       baseUrl: 'http://localhost:4200' //TODO: This should be dynamic
     })
