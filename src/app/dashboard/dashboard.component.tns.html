@@ -3,29 +3,31 @@
   [ngClass]="getDashboardBackgroundStyle(status)"
   *ngIf="timerState$ | async as status">
   <FlexboxLayout
+    #dashboardSplash
     flexDirection="row"
     justifyContent="space-between"
     height="26"
     [ngClass]="getSettingsBackdropStyle(status)">
-  <StackLayout backgroundColor="transparent">
-    <SVGImage
-      backgroundColor="transparent"
-      src="~/assets/tz-assets/asset-1.svg"
-      width="30"
-      height="30">
-    </SVGImage>
-  </StackLayout>
-  <StackLayout backgroundColor="transparent">
-    <SVGImage
-      backgroundColor="transparent"
-      src="~/assets/tz-assets/options.svg"
-      width="22.5"
-      height="4.999"
-      style="margin-top: 5;">
-    </SVGImage>
-  </StackLayout>
+    <StackLayout backgroundColor="transparent">
+      <SVGImage
+        backgroundColor="transparent"
+        src="~/assets/tz-assets/asset-1.svg"
+        width="30"
+        height="30">
+      </SVGImage>
+    </StackLayout>
+    <StackLayout backgroundColor="transparent">
+      <SVGImage
+        backgroundColor="transparent"
+        src="~/assets/tz-assets/options.svg"
+        width="22.5"
+        height="4.999"
+        style="margin-top: 5;">
+      </SVGImage>
+    </StackLayout>
   </FlexboxLayout>
   <FlexboxLayout
+    #timerWrapper
     flexDirection="column"
     height="100%"
     justifyContent="space-between"

@@ -1,8 +1,9 @@
 import { takeUntil } from 'rxjs/operators';
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { TomatozService } from '../shared/services/tomatoz.service';
 import { state, Timer } from '../timer';
+import { Color, EventData, FlexboxLayout } from '@nativescript/core';
 
 @Component({
   selector: 'app-dashboard',
@@ -13,7 +14,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   stopControlBtnText: string = 'Reset';
   workTimer: Timer;
   private ngUnsubscribe = new Subject<void>();
-
   // TODO: Handle this via an observable instead
   // TODO: Use an enum instead
   timerState: string;
