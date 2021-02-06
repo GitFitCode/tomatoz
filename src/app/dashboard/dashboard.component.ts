@@ -3,7 +3,7 @@ import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild } from '@ang
 import { Observable, Subject } from 'rxjs';
 import { TomatozService } from '../shared/services/tomatoz.service';
 import { state, Timer } from '../timer';
-import { Color, EventData, FlexboxLayout } from '@nativescript/core';
+import { Color, EventData, FlexboxLayout, fromObject, Page } from '@nativescript/core';
 
 @Component({
   selector: 'app-dashboard',
@@ -71,9 +71,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   getDashboardBackgroundStyle(status: string) {
     if (status !== 'running') {
-      return 'timer-ready';
+      return '#43FFE2';
     } else {
-      return 'timer-running';
+      return '#FF4866';
     }
   }
 

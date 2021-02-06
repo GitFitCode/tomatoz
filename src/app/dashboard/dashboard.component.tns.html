@@ -1,86 +1,89 @@
-<StackLayout
-  orientation="vertical"
-  [ngClass]="getDashboardBackgroundStyle(status)"
-  *ngIf="timerState$ | async as status">
-  <FlexboxLayout
-    #dashboardSplash
-    flexDirection="row"
-    justifyContent="space-between"
-    height="26"
-    [ngClass]="getSettingsBackdropStyle(status)">
-    <StackLayout backgroundColor="transparent">
-      <SVGImage
-        backgroundColor="transparent"
-        src="~/assets/tz-assets/asset-1.svg"
-        width="30"
-        height="30">
-      </SVGImage>
-    </StackLayout>
-    <StackLayout backgroundColor="transparent">
-      <SVGImage
-        backgroundColor="transparent"
-        src="~/assets/tz-assets/options.svg"
-        width="22.5"
-        height="4.999"
-        style="margin-top: 5;">
-      </SVGImage>
-    </StackLayout>
-  </FlexboxLayout>
-  <FlexboxLayout
-    #timerWrapper
-    flexDirection="column"
-    height="100%"
-    justifyContent="space-between"
-    alignItems="stretch"
-    [ngClass]="'dark-bg dashboard-card-container'">
+<GridLayout #pageView>
+  <StackLayout
+    orientation="vertical"
+    [backgroundColor]="getDashboardBackgroundStyle(status)"
+    *ngIf="timerState$ | async as status">
     <FlexboxLayout
-      [ngClass]="'digital-clock'"
+      #dashboardSplash
       flexDirection="row"
-      justifyContent="flex-start"
-      alignSelf="center">
-      <app-digital-clock
-        [timer]="workTimer">
-      </app-digital-clock>
+      justifyContent="space-between"
+      height="26"
+      [backgroundColor]="getDashboardBackgroundStyle(status)"
+      [ngClass]="getSettingsBackdropStyle(status)">
+      <StackLayout backgroundColor="transparent">
+        <SVGImage
+          backgroundColor="transparent"
+          src="~/assets/tz-assets/asset-1.svg"
+          width="30"
+          height="30">
+        </SVGImage>
+      </StackLayout>
+      <StackLayout backgroundColor="transparent">
+        <SVGImage
+          backgroundColor="transparent"
+          src="~/assets/tz-assets/options.svg"
+          width="22.5"
+          height="4.999"
+          style="margin-top: 5;">
+        </SVGImage>
+      </StackLayout>
     </FlexboxLayout>
     <FlexboxLayout
-      flexDirection="row"
-      justifyContent="center"
-      alignSelf="center">
-      <Button
-        *ngIf="status !== 'reset'"
-        [ngClass]="getStoppedControlBtnStyle()"
-        text="Reset"
-        class="btn btn-primary"
-        (tap)="onStopped()">
-      </Button>
+      #timerWrapper
+      flexDirection="column"
+      height="100%"
+      justifyContent="space-between"
+      alignItems="stretch"
+      [ngClass]="'dark-bg dashboard-card-container'">
+      <FlexboxLayout
+        [ngClass]="'digital-clock'"
+        flexDirection="row"
+        justifyContent="flex-start"
+        alignSelf="center">
+        <app-digital-clock
+          [timer]="workTimer">
+        </app-digital-clock>
+      </FlexboxLayout>
+      <FlexboxLayout
+        flexDirection="row"
+        justifyContent="center"
+        alignSelf="center">
+        <Button
+          *ngIf="status !== 'reset'"
+          [ngClass]="getStoppedControlBtnStyle()"
+          text="Reset"
+          class="btn btn-primary"
+          (tap)="onStopped()">
+        </Button>
+      </FlexboxLayout>
+      <FlexboxLayout
+        flexDirection="row"
+        justifyContent="center"
+        alignSelf="center">
+        <app-tomatoz>
+        </app-tomatoz>
+      </FlexboxLayout>
+      <FlexboxLayout
+        flexDirection="row"
+        justifyContent="center"
+        alignSelf="center">
+        <app-controls
+          (started)="onStarted()"
+          (paused)="onPaused()"
+          [showPause]="status === 'running'"
+          [showStart]="status !== 'running'">
+        </app-controls>
+      </FlexboxLayout>
+      <FlexboxLayout
+        flexDirection="row"
+        justifyContent="center"
+        alignItems="center">
+        <Label
+          [ngClass]="'app-description'"
+          text="a pomodoro app"
+          alignSelf="flex-end">
+        </Label>
+      </FlexboxLayout>
     </FlexboxLayout>
-    <FlexboxLayout
-      flexDirection="row"
-      justifyContent="center"
-      alignSelf="center">
-      <app-tomatoz>
-      </app-tomatoz>
-    </FlexboxLayout>
-    <FlexboxLayout
-      flexDirection="row"
-      justifyContent="center"
-      alignSelf="center">
-      <app-controls
-        (started)="onStarted()"
-        (paused)="onPaused()"
-        [showPause]="status === 'running'"
-        [showStart]="status !== 'running'">
-      </app-controls>
-    </FlexboxLayout>
-    <FlexboxLayout
-      flexDirection="row"
-      justifyContent="center"
-      alignItems="center">
-      <Label
-        [ngClass]="'app-description'"
-        text="a pomodoro app"
-        alignSelf="flex-end">
-      </Label>
-    </FlexboxLayout>
-  </FlexboxLayout>
-</StackLayout>
+  </StackLayout>
+</GridLayout>
