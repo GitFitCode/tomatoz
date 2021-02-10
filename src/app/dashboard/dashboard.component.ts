@@ -3,7 +3,7 @@ import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild, ElementRef 
 import { Observable, Subject } from 'rxjs';
 import { TomatozService } from '../shared/services/tomatoz.service';
 import { state, Timer } from '../timer';
-import { AnimationDefinition, Color, EventData, FlexboxLayout, fromObject, Page } from '@nativescript/core';
+import { AnimationDefinition, Color, EventData, FlexboxLayout, fromObject, Page, Screen } from '@nativescript/core';
 import * as enums from 'tns-core-modules/ui/enums';
 
 @Component({
@@ -27,6 +27,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   // TODO: Use an enum instead
   timerState: string;
   timerState$: Observable<state>;
+
+  showMenuOptions: boolean = false;
 
   constructor(
     private tomatozSrv: TomatozService,
@@ -105,11 +107,31 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
   }
 
-  getSettingsBackdropStyle(status: string) {
+  getSettingsBackdropStyle(status: string, height?: number) {
     if (status !== 'running') {
-      return 'timer-ready settings-controls';
+      return 'timer-ready settings-controls showing-menu-list';
     } else {
-      return 'timer-running settings-controls';
+      return 'timer-running settings-controls showing-menu-list';
     }
+  }
+
+  calcDashboardSplaceHeight(): any {
+    let calcVal = 26
+    if (this.showMenuOptions) {
+      calcVal = Screen.mainScreen.heightDIPs - 217;
+    }
+    return calcVal;
+  }
+
+  calcTimerWrapper() {
+    if (this.showMenuOptions) {
+      return '117';
+    } else {
+      return '100%'
+    }
+  }
+
+  onClickMenuIcon() {
+    this.showMenuOptions = !this.showMenuOptions;
   }
 }

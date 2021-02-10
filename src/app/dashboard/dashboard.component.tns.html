@@ -7,10 +7,11 @@
       #dashboardSplash
       flexDirection="row"
       justifyContent="space-between"
-      height="26"
-      [backgroundColor]="getDashboardBackgroundStyle(status)"
-      [ngClass]="getSettingsBackdropStyle(status)">
-      <StackLayout backgroundColor="transparent">
+      [backgroundColor]="getDashboardBackgroundStyle(status, 800)"
+      [ngClass]="getSettingsBackdropStyle(status)"
+      [ngStyle]="{'height': calcDashboardSplaceHeight() }">
+      <StackLayout backgroundColor="transparent"
+        (tap)="onClickMenuIcon()">
         <SVGImage
           backgroundColor="transparent"
           src="~/assets/tz-assets/asset-1.svg"
@@ -31,7 +32,7 @@
     <FlexboxLayout
       #timerWrapper
       flexDirection="column"
-      height="100%"
+      [height]="calcTimerWrapper()"
       justifyContent="space-between"
       alignItems="stretch"
       [ngClass]="'dark-bg dashboard-card-container'">
@@ -45,6 +46,7 @@
         </app-digital-clock>
       </FlexboxLayout>
       <FlexboxLayout
+        *ngIf="!showMenuOptions"
         flexDirection="row"
         justifyContent="center"
         alignSelf="center">
@@ -57,6 +59,7 @@
         </Button>
       </FlexboxLayout>
       <FlexboxLayout
+        *ngIf="!showMenuOptions"
         #tomatozTimer
         flexDirection="row"
         justifyContent="center"
@@ -65,6 +68,7 @@
         </app-tomatoz>
       </FlexboxLayout>
       <FlexboxLayout
+        *ngIf="!showMenuOptions"
         flexDirection="row"
         justifyContent="center"
         alignSelf="center">
@@ -76,6 +80,7 @@
         </app-controls>
       </FlexboxLayout>
       <FlexboxLayout
+        *ngIf="!showMenuOptions"
         flexDirection="row"
         justifyContent="center"
         alignItems="center">
