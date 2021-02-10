@@ -1,9 +1,10 @@
 import { takeUntil } from 'rxjs/operators';
-import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { TomatozService } from '../shared/services/tomatoz.service';
 import { state, Timer } from '../timer';
-import { Color, EventData, FlexboxLayout, fromObject, Page } from '@nativescript/core';
+import { AnimationDefinition, Color, EventData, FlexboxLayout, fromObject, Page } from '@nativescript/core';
+import * as enums from 'tns-core-modules/ui/enums';
 
 @Component({
   selector: 'app-dashboard',
@@ -11,6 +12,14 @@ import { Color, EventData, FlexboxLayout, fromObject, Page } from '@nativescript
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit, OnDestroy {
+  @ViewChild('dashboardSplash')
+  dashboardSplash: ElementRef;
+  @ViewChild('timerWrapper')
+  timerWrapper: ElementRef;
+  @ViewChild('tomatozTimer')
+  tomatozTimer: ElementRef;
+  tomatozTimerAnimation: Animation;
+
   stopControlBtnText: string = 'Reset';
   workTimer: Timer;
   private ngUnsubscribe = new Subject<void>();
@@ -48,6 +57,24 @@ export class DashboardComponent implements OnInit, OnDestroy {
       });
   }
 
+  defineAnimations() {
+    const dashboardSplash = this.dashboardSplash.nativeElement;
+    const timerWrapper = this.timerWrapper.nativeElement;
+    const timerAnimationDefintionsBefore: AnimationDefinition[] = [];
+    const commonAnimationProps = {
+      duration: 500,
+      curve: enums.AnimationCurve.easeInOut
+    };
+  }
+
+  animateTomatozTimer() {
+    const tomatozTimerViewEl = this.tomatozTimer.nativeElement;
+    tomatozTimerViewEl.animate({
+      rotate: 360,
+      duration: 1500000
+    });
+  }
+
   onStateChange() {
     // TODO: Use the method to help determine which UI to display
     this.cdRef.detectChanges();
@@ -55,6 +82,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   onStarted() {
     this.workTimer.start();
+    this.animateTomatozTimer();
   }
 
   onPaused() {
