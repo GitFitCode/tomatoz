@@ -10,6 +10,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { DigitalClockComponent } from '@src/app/dashboard/digital-clock/digital-clock.component';
 import { SettingsComponent } from '@src/app/dashboard/settings/settings.component';
 import { ControlsComponent } from '@src/app/dashboard/controls/controls.component';
+import { TouchScaleDirective } from './shared/directives/touch-scale.directive';
 
 
 
@@ -21,6 +22,7 @@ import { ControlsComponent } from '@src/app/dashboard/controls/controls.componen
     DigitalClockComponent,
     SettingsComponent,
     ControlsComponent,
+    TouchScaleDirective,
   ],
   imports: [
     BrowserModule,

@@ -12,6 +12,7 @@ import { SettingsComponent } from '@src/app/dashboard/settings/settings.componen
 // Uncomment and add to NgModule imports if you need to use two-way binding and/or HTTP wrapper
 import { NativeScriptFormsModule, NativeScriptHttpClientModule } from '@nativescript/angular';
 import { ControlsComponent } from '@src/app/dashboard/controls/controls.component';
+import { TouchScaleDirective } from './shared/directives/touch-scale.directive';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { ControlsComponent } from '@src/app/dashboard/controls/controls.componen
     DigitalClockComponent,
     SettingsComponent,
     ControlsComponent,
+    TouchScaleDirective
   ],
   imports: [
     NativeScriptModule,

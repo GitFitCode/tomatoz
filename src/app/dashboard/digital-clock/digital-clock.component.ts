@@ -10,7 +10,6 @@ import { Timer } from '@src/app/timer';
 export class DigitalClockComponent implements OnInit {
   @Input() timer: Timer;
   time$: Observable<number>;
-  dummyTime: string = '25:00';
 
   constructor() { }
 

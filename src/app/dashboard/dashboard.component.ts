@@ -1,10 +1,9 @@
 import { takeUntil } from 'rxjs/operators';
 import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, Subscription } from 'rxjs';
 import { TomatozService } from '../shared/services/tomatoz.service';
 import { state, Timer } from '../timer';
-import { AnimationDefinition, Color, EventData, FlexboxLayout, fromObject, Page, Screen } from '@nativescript/core';
-import * as enums from 'tns-core-modules/ui/enums';
+import { AnimationDefinition, Color, EventData, FlexboxLayout, fromObject, Page, Screen, Enums, Animation } from '@nativescript/core';
 
 @Component({
   selector: 'app-dashboard',
@@ -18,7 +17,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
   timerWrapper: ElementRef;
   @ViewChild('tomatozTimer')
   tomatozTimer: ElementRef;
-  tomatozTimerAnimation: Animation;
+  tomatozTimerAnimation: Animation = null;
+  tomatozTimerViewEl;
+  remainingTime$: Observable<number>;
+  remainingTimeSub: Subscription;
+  remainingTime;
+  rotationValue;
+  rotationFromStart;
 
   stopControlBtnText: string = 'Reset';
   workTimer: Timer;
@@ -29,7 +34,23 @@ export class DashboardComponent implements OnInit, OnDestroy {
   timerState$: Observable<state>;
 
   showMenuOptions: boolean = false;
-
+  menuOptions: any[] = [
+    {
+      label: 'TODAY'
+    },
+    {
+      label: 'ACTIVITY'
+    },
+    {
+      label: 'RANK'
+    },
+    {
+      label: 'PROJECTS'
+    },
+    {
+      label: 'SETTINGS'
+    },
+  ]
   constructor(
     private tomatozSrv: TomatozService,
     private cdRef: ChangeDetectorRef
@@ -39,6 +60,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.workTimer = this.tomatozSrv.workTimer;
     this.timerState$ = this.workTimer.getStateObservable();
     this.getCurrentTimerState();
+    this.getTimeRemaining();
     this.tomatozSrv.reloadSettings();
   }
 
@@ -59,19 +81,20 @@ export class DashboardComponent implements OnInit, OnDestroy {
       });
   }
 
-  defineAnimations() {
-    const dashboardSplash = this.dashboardSplash.nativeElement;
-    const timerWrapper = this.timerWrapper.nativeElement;
-    const timerAnimationDefintionsBefore: AnimationDefinition[] = [];
-    const commonAnimationProps = {
-      duration: 500,
-      curve: enums.AnimationCurve.easeInOut
-    };
+  getTimeRemaining() {
+    this.remainingTimeSub = this.workTimer
+      .getTimeRemainingObservable()
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe((remainingTime: any) => {
+        this.remainingTime = remainingTime;
+        this.rotationValue = this.remainingTime / 1500000 * 360;
+        this.rotationFromStart = (360 - this.rotationValue);
+        console.log(`rotationValue:: ${this.rotationValue}, remainingTime:: ${remainingTime}, rotationFromStart:: ${this.rotationFromStart}`);
+      });
   }
 
   animateTomatozTimer() {
-    const tomatozTimerViewEl = this.tomatozTimer.nativeElement;
-    tomatozTimerViewEl.animate({
+    const timerRef = this.tomatozTimer.nativeElement.animate({
       rotate: 360,
       duration: 1500000
     });
@@ -107,6 +130,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
   }
 
+  getMenuListItemStyle(status: string) {
+    if (status !== 'running') {
+      return '#101426';
+    } else {
+      return '#FFFFFF';
+    }
+  }
+
   getSettingsBackdropStyle(status: string, height?: number) {
     if (status !== 'running') {
       return 'timer-ready settings-controls showing-menu-list';
@@ -115,10 +146,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
   }
 
-  calcDashboardSplaceHeight(): any {
-    let calcVal = 26
+  calcDashboardSplashHeight(): any {
+    let calcVal = 76;
     if (this.showMenuOptions) {
-      calcVal = Screen.mainScreen.heightDIPs - 217;
+      calcVal = Screen.mainScreen.heightDIPs - 166;
     }
     return calcVal;
   }

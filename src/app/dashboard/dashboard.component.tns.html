@@ -2,32 +2,72 @@
   <StackLayout
     orientation="vertical"
     [backgroundColor]="getDashboardBackgroundStyle(status)"
+    alignItems="center"
     *ngIf="timerState$ | async as status">
     <FlexboxLayout
       #dashboardSplash
-      flexDirection="row"
-      justifyContent="space-between"
       [backgroundColor]="getDashboardBackgroundStyle(status, 800)"
-      [ngClass]="getSettingsBackdropStyle(status)"
-      [ngStyle]="{'height': calcDashboardSplaceHeight() }">
-      <StackLayout backgroundColor="transparent"
-        (tap)="onClickMenuIcon()">
-        <SVGImage
+      flexDirection="column"
+      alignContent="center"
+      [ngStyle]="{'height': calcDashboardSplashHeight() }">
+      <FlexboxLayout
+        flexDirection="row"
+        justifyContent="space-between"
+        [ngClass]="getSettingsBackdropStyle(status)"
+        height="76"
+        backgroundColor="transparent">
+        <StackLayout
+          appTouchScale
+          *ngIf="!showMenuOptions"
           backgroundColor="transparent"
-          src="~/assets/tz-assets/asset-1.svg"
-          width="30"
-          height="30">
-        </SVGImage>
-      </StackLayout>
-      <StackLayout backgroundColor="transparent">
-        <SVGImage
+          (tap)="onClickMenuIcon()">
+          <SVGImage
+            backgroundColor="transparent"
+            src="~/assets/tz-assets/asset-1.svg"
+            width="30"
+            height="30">
+          </SVGImage>
+        </StackLayout>
+        <StackLayout
+          appTouchScale
+          *ngIf="showMenuOptions"
           backgroundColor="transparent"
-          src="~/assets/tz-assets/options.svg"
-          width="22.5"
-          height="4.999"
-          style="margin-top: 5;">
-        </SVGImage>
-      </StackLayout>
+          (tap)="onClickMenuIcon()">
+          <SVGImage
+            backgroundColor="transparent"
+            src="~/assets/tz-assets/dashboard-icon.svg"
+            width="17.5"
+            height="22.5">
+          </SVGImage>
+        </StackLayout>
+        <StackLayout
+          appTouchScale
+          backgroundColor="transparent">
+          <SVGImage
+            backgroundColor="transparent"
+            src="~/assets/tz-assets/options.svg"
+            width="22.5"
+            height="4.999"
+            style="margin-top: 5;">
+          </SVGImage>
+        </StackLayout>
+      </FlexboxLayout>
+      <FlexboxLayout
+        *ngIf="showMenuOptions"
+        flexDirection="column"
+        justifyContent="center"
+        alignContent="center"
+        alignItems="center"
+        backgroundColor="transparent">
+        <Label
+          appTouchScale
+          [color]="getMenuListItemStyle(status)"
+          backgroundColor="transparent"
+          *ngFor="let opt of menuOptions"
+          [ngClass]="'app-description menu-list'"
+          [text]="opt.label">
+        </Label>
+      </FlexboxLayout>
     </FlexboxLayout>
     <FlexboxLayout
       #timerWrapper
@@ -51,6 +91,7 @@
         justifyContent="center"
         alignSelf="center">
         <Button
+          appTouchScale
           *ngIf="status !== 'reset'"
           [ngClass]="getStoppedControlBtnStyle()"
           text="Reset"
@@ -64,7 +105,8 @@
         flexDirection="row"
         justifyContent="center"
         alignSelf="center">
-        <app-tomatoz>
+        <app-tomatoz
+          appTouchScale>
         </app-tomatoz>
       </FlexboxLayout>
       <FlexboxLayout
@@ -73,6 +115,7 @@
         justifyContent="center"
         alignSelf="center">
         <app-controls
+          appTouchScale
           (started)="onStarted()"
           (paused)="onPaused()"
           [showPause]="status === 'running'"
@@ -85,6 +128,7 @@
         justifyContent="center"
         alignItems="center">
         <Label
+          appTouchScale
           [ngClass]="'app-description'"
           text="a pomodoro app"
           alignSelf="flex-end">
