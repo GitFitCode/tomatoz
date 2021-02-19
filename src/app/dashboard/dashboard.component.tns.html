@@ -3,7 +3,7 @@
     orientation="vertical"
     [backgroundColor]="getDashboardBackgroundStyle(status)"
     alignItems="center"
-    *ngIf="timerState$ | async as status">
+    *ngIf="workTimerState$ | async as status">
     <FlexboxLayout
       #dashboardSplash
       [backgroundColor]="getDashboardBackgroundStyle(status, 800)"
@@ -81,9 +81,24 @@
         flexDirection="row"
         justifyContent="flex-start"
         alignSelf="center">
-        <app-digital-clock
-          [timer]="workTimer">
-        </app-digital-clock>
+        <ng-container>
+          <app-digital-clock
+            *ngIf="timerState === 'work'"
+            [timer]="workTimer">
+          </app-digital-clock>
+        </ng-container>
+        <ng-container>
+          <app-digital-clock
+            *ngIf="timerState === 'short'"
+            [timer]="shortBreakTimer">
+          </app-digital-clock>
+        </ng-container>
+        <ng-container>
+          <app-digital-clock
+            *ngIf="timerState === 'long'"
+            [timer]="longBreakTimer">
+          </app-digital-clock>
+        </ng-container>
       </FlexboxLayout>
       <FlexboxLayout
         *ngIf="!showMenuOptions"
@@ -129,19 +144,19 @@
         alignItems="center"
         class="timer-type-buttons timer-type-selector">
         <Button
-          appTouchScale
-          class=""
-          text="10">
+          [ngClass]="getTimerBtnStyle('long', status)"
+          text="30"
+          (tap)="tapLongTimerTimeSelectionBtn()">
         </Button>
         <Button
-          appTouchScale
-          class=""
-          text="25">
+          [ngClass]="getTimerBtnStyle('work', status)"
+          text="25"
+          (tap)="tapWorkTimeSelectionBtn()">
         </Button>
         <Button
-          appTouchScale
-          class=""
-          text="5">
+          [ngClass]="getTimerBtnStyle('short', status)"
+          text="5"
+          (tap)="tapShortTimerTimeSelectionBtn()">
         </Button>
         <!-- <Label
           appTouchScale

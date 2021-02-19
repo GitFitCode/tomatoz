@@ -33,8 +33,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private ngUnsubscribe = new Subject<void>();
   // TODO: Handle this via an observable instead
   // TODO: Use an enum instead
-  timerState: 'work' | 'short' | 'long';
-  timerState$: Observable<state>;
+  timerState: string;
+  workTimerState$: Observable<state>;
 
   showMenuOptions: boolean = false;
   menuOptions: any[] = [
@@ -54,19 +54,19 @@ export class DashboardComponent implements OnInit, OnDestroy {
       label: 'SETTINGS'
     },
   ];
-  activeBtn: number | null;
+  activeTimerType: 'work' | 'short' | 'long';
   constructor(
     private tomatozSrv: TomatozService,
     private cdRef: ChangeDetectorRef
   ) {  }
 
   ngOnInit(): void {
+    this.setActiveTimerType = this.setActiveTimerType.bind(this);
     this.workTimer = this.tomatozSrv.workTimer;
     this.shortBreakTimer = this.tomatozSrv.shortBreakTimer;
     this.longBreakTimer = this.tomatozSrv.longBreakTimer;
-    this.setActiveBtn = this.setActiveBtn.bind(this);
 
-    this.timerState$ = this.workTimer.getStateObservable();
+    this.workTimerState$ = this.workTimer.getStateObservable();
     this.getCurrentTimerState();
     this.getTimeRemaining();
     this.tomatozSrv.reloadSettings();
@@ -82,9 +82,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
       .getState()
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((currentState) => {
-        console.log(`State: ${currentState}`)
-        this.timerState = currentState;
         this.onStateChange(currentState);
+        this.timerState = currentState;
         // TODO: Use this value to determine which timer is being used
       });
   }
@@ -101,15 +100,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
       });
   }
 
-  setActiveBtn(state: 'work' | 'short' | 'long') {
+  setActiveTimerType(state: 'work' | 'short' | 'long') {
     switch(state) {
       case 'work':
-        this.activeBtn = 0;
+        this.activeTimerType = 'work';
       case 'short':
-        this.activeBtn = 1;
+        this.activeTimerType = 'short';
       case 'long':
-        this.activeBtn = 2;
+        this.activeTimerType = 'long';
     }
+    console.log(`State: ${state}, activeBtn ${this.activeTimerType}`)
     this.cdRef.detectChanges();
   }
 
@@ -121,7 +121,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   onStateChange(currentState: 'work' | 'short' | 'long' ) {
-    this.setActiveBtn(currentState);
     this.cdRef.detectChanges();
   }
 
@@ -141,6 +140,35 @@ export class DashboardComponent implements OnInit, OnDestroy {
   getStoppedControlBtnStyle() {
     return 'reset';
   }
+
+  getTimerBtnStyle(type?, state?) {
+    // console.log(`TYPE: ${type}, state: ${state}`)
+    if (type === 'work') {
+      if (state === 'ready') {
+        return 'timer-type-work-ready';
+      } else {
+        return 'timer-type-disabled';
+      }
+    } else {
+      return 'timer-type-selector-btn-unselected';
+    }
+  }
+
+  tapWorkTimeSelectionBtn() {
+    this.setActiveTimerType('work');
+    console.log('Clicked! inside work time selection');
+  }
+
+  tapShortTimerTimeSelectionBtn() {
+    this.setActiveTimerType('short');
+    console.log('Clicked! inside short time selection');
+  }
+
+  tapLongTimerTimeSelectionBtn() {
+    this.setActiveTimerType('long');
+    console.log('Clicked! inside long time selection');
+  }
+
 
   getDashboardBackgroundStyle(status: string) {
     if (status !== 'running') {

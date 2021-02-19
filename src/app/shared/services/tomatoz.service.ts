@@ -70,12 +70,12 @@ export class TomatozService implements OnDestroy {
      * NOTE: We should have a concept of a session
      */
     this.incrementPomodoroCount();
-    if (this.pomodoros % 4 === 0) {
-      // Session of 4 is done, lets do a long break
-      this.stateSubject.next('long');
-    } else {
-      this.stateSubject.next('short');
-    }
+    // if (this.pomodoros % 4 === 0) {
+    //   // Session of 4 is done, lets do a long break
+    //   this.stateSubject.next('long');
+    // } else {
+    //   this.stateSubject.next('short');
+    // }
     // TODO: Notify the user about the work session completion
     // TODO: Determine if there should be a long or short break
   }
