@@ -18,6 +18,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   @ViewChild('tomatozTimer')
   tomatozTimer: ElementRef;
   tomatozTimerAnimation: Animation = null;
+  tomatozTimerAnimationDefinition: AnimationDefinition;
   tomatozTimerViewEl;
   remainingTime$: Observable<number>;
   remainingTimeSub: Subscription;
@@ -35,6 +36,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   // TODO: Use an enum instead
   timerState: string;
   workTimerState$: Observable<state>;
+  workTimerState;
+  workTimerStateSub: Subscription;
 
   showMenuOptions: boolean = false;
   menuOptions: any[] = [
@@ -67,6 +70,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.longBreakTimer = this.tomatozSrv.longBreakTimer;
 
     this.workTimerState$ = this.workTimer.getStateObservable();
+    this.getWorkTimerStateSub();
     this.getCurrentTimerState();
     this.getTimeRemaining();
     this.tomatozSrv.reloadSettings();
@@ -100,6 +104,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
       });
   }
 
+  getWorkTimerStateSub() {
+    this.workTimerStateSub = this.workTimerState$
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe((workTimerState) => {
+        this.workTimerState = workTimerState;
+      });
+  }
+
   setActiveTimerType(state: 'work' | 'short' | 'long') {
     switch(state) {
       case 'work':
@@ -109,15 +121,36 @@ export class DashboardComponent implements OnInit, OnDestroy {
       case 'long':
         this.activeTimerType = 'long';
     }
-    console.log(`State: ${state}, activeBtn ${this.activeTimerType}`)
+    // console.log(`State: ${state}, activeBtn ${this.activeTimerType}`)
     this.cdRef.detectChanges();
   }
 
   animateTomatozTimer() {
-    const timerRef = this.tomatozTimer.nativeElement.animate({
-      rotate: 360,
-      duration: 1500000
-    });
+    this.tomatozTimerViewEl = this.tomatozTimer.nativeElement;
+    const continueAnimation = (
+      this.workTimerState === 'running' ||
+      this.workTimerState === 'ready'
+    ) ? true : false;
+    this.tomatozTimerAnimationDefinition = {
+      rotate: this.rotationFromStart,
+      duration: 60,
+      target:  this.tomatozTimerViewEl
+    };
+    this.tomatozTimerAnimation = new Animation([
+      this.tomatozTimerAnimationDefinition
+    ]);
+    if (continueAnimation) {
+      this.tomatozTimerAnimation.play()
+        .then(() => {
+          setTimeout(() => {
+            this.animateTomatozTimer();
+          }, 0);
+          // console.log(`rotationValue:: ${this.rotationValue}, remainingTime:: ${this.remainingTime}, rotationFromStart:: ${this.rotationFromStart}`);
+        })
+        .catch((e) => {
+          console.log(e.message);
+        });
+    }
   }
 
   onStateChange(currentState: 'work' | 'short' | 'long' ) {
@@ -135,6 +168,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   onStopped() {
     this.workTimer.reset();
+    this.animateTomatozTimer();
+
   }
 
   getStoppedControlBtnStyle() {
