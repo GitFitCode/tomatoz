@@ -1,4 +1,4 @@
-/* Add mobile styles for the component here.  */
+
 * {
   background-color: #101426;
 }
@@ -60,4 +60,29 @@
   font-weight: 200;
   color: #FFFFFF;
   background-color: transparent;
+}
+
+.timer-type-buttons {
+  Button {
+    font-size: 20;
+    background-color: #101426;
+    margin: 10;
+    border-width: 1;
+    color: #FFFFFF;
+    border-color:gray;
+    padding: 12;
+    border-radius: 10;
+    text-transform: capitalize;
+    font-family: "filson-soft",sans-serif;
+    font-display: auto;
+    font-style: normal;
+    font-weight: 500;
+  }
+
+}
+.timer-type-selector {
+  Button {
+    width: 55;
+    height: 55;
+  }
 }

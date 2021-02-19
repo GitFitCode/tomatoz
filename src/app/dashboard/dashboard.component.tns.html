@@ -126,13 +126,26 @@
         *ngIf="!showMenuOptions"
         flexDirection="row"
         justifyContent="center"
-        alignItems="center">
-        <Label
+        alignItems="center"
+        class="timer-type-buttons timer-type-selector">
+        <Button
+          class=""
+          text="10">
+        </Button>
+        <Button
+          class=""
+          text="25">
+        </Button>
+        <Button
+          class=""
+          text="5">
+        </Button>
+        <!-- <Label
           appTouchScale
           [ngClass]="'app-description'"
           text="a pomodoro app"
           alignSelf="flex-end">
-        </Label>
+        </Label> -->
       </FlexboxLayout>
     </FlexboxLayout>
   </StackLayout>
