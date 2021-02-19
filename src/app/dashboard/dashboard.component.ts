@@ -27,10 +27,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   stopControlBtnText: string = 'Reset';
   workTimer: Timer;
+  shortBreakTimer: Timer;
+  longBreakTimer: Timer;
+
   private ngUnsubscribe = new Subject<void>();
   // TODO: Handle this via an observable instead
   // TODO: Use an enum instead
-  timerState: string;
+  timerState: 'work' | 'short' | 'long';
   timerState$: Observable<state>;
 
   showMenuOptions: boolean = false;
@@ -50,7 +53,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     {
       label: 'SETTINGS'
     },
-  ]
+  ];
+  activeBtn: number | null;
   constructor(
     private tomatozSrv: TomatozService,
     private cdRef: ChangeDetectorRef
@@ -58,6 +62,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.workTimer = this.tomatozSrv.workTimer;
+    this.shortBreakTimer = this.tomatozSrv.shortBreakTimer;
+    this.longBreakTimer = this.tomatozSrv.longBreakTimer;
+    this.setActiveBtn = this.setActiveBtn.bind(this);
+
     this.timerState$ = this.workTimer.getStateObservable();
     this.getCurrentTimerState();
     this.getTimeRemaining();
@@ -76,7 +84,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       .subscribe((currentState) => {
         console.log(`State: ${currentState}`)
         this.timerState = currentState;
-        this.onStateChange();
+        this.onStateChange(currentState);
         // TODO: Use this value to determine which timer is being used
       });
   }
@@ -89,8 +97,20 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.remainingTime = remainingTime;
         this.rotationValue = this.remainingTime / 1500000 * 360;
         this.rotationFromStart = (360 - this.rotationValue);
-        console.log(`rotationValue:: ${this.rotationValue}, remainingTime:: ${remainingTime}, rotationFromStart:: ${this.rotationFromStart}`);
+        // console.log(`rotationValue:: ${this.rotationValue}, remainingTime:: ${remainingTime}, rotationFromStart:: ${this.rotationFromStart}`);
       });
+  }
+
+  setActiveBtn(state: 'work' | 'short' | 'long') {
+    switch(state) {
+      case 'work':
+        this.activeBtn = 0;
+      case 'short':
+        this.activeBtn = 1;
+      case 'long':
+        this.activeBtn = 2;
+    }
+    this.cdRef.detectChanges();
   }
 
   animateTomatozTimer() {
@@ -100,8 +120,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     });
   }
 
-  onStateChange() {
-    // TODO: Use the method to help determine which UI to display
+  onStateChange(currentState: 'work' | 'short' | 'long' ) {
+    this.setActiveBtn(currentState);
     this.cdRef.detectChanges();
   }
 
