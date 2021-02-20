@@ -134,7 +134,8 @@
           (started)="onStarted()"
           (paused)="onPaused()"
           [showPause]="status === 'running'"
-          [showStart]="status !== 'running'">
+          [showStart]="status !== 'running'"
+          [timerType]="activeTimerType">
         </app-controls>
       </FlexboxLayout>
       <FlexboxLayout
@@ -144,16 +145,19 @@
         alignItems="center"
         class="timer-type-buttons timer-type-selector">
         <Button
+          [isEnabled]="status !== 'running'"
           [ngClass]="getTimerBtnStyle('long', status)"
           text="30"
           (tap)="tapLongTimerTimeSelectionBtn('long')">
         </Button>
         <Button
+          [isEnabled]="status !== 'running'"
           [ngClass]="getTimerBtnStyle('work', status)"
           text="25"
           (tap)="tapWorkTimeSelectionBtn('work')">
         </Button>
         <Button
+          [isEnabled]="status !== 'running'"
           [ngClass]="getTimerBtnStyle('short', status)"
           text="5"
           (tap)="tapShortTimerTimeSelectionBtn('short')">

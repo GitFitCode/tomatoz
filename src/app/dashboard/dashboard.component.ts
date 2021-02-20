@@ -233,7 +233,13 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
 
   getDashboardBackgroundStyle(status: string) {
     if (status !== 'running') {
-      return '#43FFE2';
+      if (this.activeTimerType === 'work') {
+        return '#43FFE2';
+      } else if (this.activeTimerType === 'short') {
+        return '#3366FF'
+      } else if (this.activeTimerType === 'long') {
+        return '#3366FF'
+      }
     } else {
       return '#FF4866';
     }

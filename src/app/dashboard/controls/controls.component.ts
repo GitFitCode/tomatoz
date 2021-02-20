@@ -11,6 +11,7 @@ export class ControlsComponent implements OnInit {
 
   @Input() showStart = false;
   @Input() showPause = false;
+  @Input() timerType: 'work' | 'short' | 'long' = 'work';
 
   @Output() started = new EventEmitter();
   @Output() paused = new EventEmitter();
@@ -26,7 +27,13 @@ export class ControlsComponent implements OnInit {
    */
 
   getStartedControlBtnStyle() {
-    return 'control-btn ready';
+    if (this.timerType === 'work') {
+      return 'control-btn ready';
+    } else if (this.timerType === 'short') {
+      return 'control-btn short-ready';
+    } else if (this.timerType === 'long') {
+      return 'control-btn long-ready';
+    }
   }
 
   getPausedControlBtnStyle() {
