@@ -1,16 +1,17 @@
 import { takeUntil } from 'rxjs/operators';
-import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { Observable, Subject, Subscription } from 'rxjs';
 import { TomatozService } from '../shared/services/tomatoz.service';
 import { state, Timer } from '../timer';
 import { AnimationDefinition, Color, EventData, FlexboxLayout, fromObject, Page, Screen, Enums, Animation } from '@nativescript/core';
+import { UIService } from '../shared/services/ui.service';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardComponent implements OnInit, OnDestroy {
+export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('dashboardSplash')
   dashboardSplash: ElementRef;
   @ViewChild('timerWrapper')
@@ -30,6 +31,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   workTimer: Timer;
   shortBreakTimer: Timer;
   longBreakTimer: Timer;
+
 
   private ngUnsubscribe = new Subject<void>();
   // TODO: Handle this via an observable instead
@@ -57,10 +59,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
       label: 'SETTINGS'
     },
   ];
-  activeTimerType: 'work' | 'short' | 'long';
+  activeTimerType: 'work' | 'short' | 'long' = 'work';
+  activeTimerType$: Observable<'work' | 'short' | 'long'>;
+  activeTimerTypeSub: Subscription;
   constructor(
     private tomatozSrv: TomatozService,
-    private cdRef: ChangeDetectorRef
+    private cdRef: ChangeDetectorRef,
+    private uISrv: UIService
   ) {  }
 
   ngOnInit(): void {
@@ -79,6 +84,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
+  }
+
+  ngAfterViewInit(): void {
+    this.activeTimerTypeSub = this.uISrv.activeTimerType
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe((type) => {
+        this.activeTimerType = type;
+        console.log('After init type', type)
+    });
   }
 
   getCurrentTimerState() {
@@ -113,6 +127,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   setActiveTimerType(state: 'work' | 'short' | 'long') {
+        console.log(`State: ${state}, activeBtn ${this.activeTimerType}`)
     switch(state) {
       case 'work':
         this.activeTimerType = 'work';
@@ -121,7 +136,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
       case 'long':
         this.activeTimerType = 'long';
     }
-    // console.log(`State: ${state}, activeBtn ${this.activeTimerType}`)
     this.cdRef.detectChanges();
   }
 
@@ -177,10 +191,23 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   getTimerBtnStyle(type?, state?) {
-    // console.log(`TYPE: ${type}, state: ${state}`)
-    if (type === 'work') {
+    // console.log(`TYPE: ${type}, state: ${state}, timerType:: ${this.activeTimerType}` )
+    console.log(`TIMETYPE ${this.activeTimerType}`)
+    if (type === 'work' && this.activeTimerType === 'work') {
       if (state === 'ready') {
         return 'timer-type-work-ready';
+      } else {
+        return 'timer-type-disabled';
+      }
+    } else if (type === 'short' && this.activeTimerType === 'short') {
+      if (state === 'ready') {
+        return 'timer-type-short-ready';
+      } else {
+        return 'timer-type-disabled';
+      }
+    }  else if (type === 'long' && this.activeTimerType === 'long') {
+      if (state === 'ready') {
+        return 'timer-type-long-ready';
       } else {
         return 'timer-type-disabled';
       }
@@ -189,21 +216,20 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
   }
 
-  tapWorkTimeSelectionBtn() {
-    this.setActiveTimerType('work');
+  tapWorkTimeSelectionBtn(type: 'work' | 'long' | 'short') {
+    this.uISrv.setActiveTimerType(type);
     console.log('Clicked! inside work time selection');
   }
 
-  tapShortTimerTimeSelectionBtn() {
-    this.setActiveTimerType('short');
+  tapShortTimerTimeSelectionBtn(type: 'work' | 'long' | 'short') {
+    this.uISrv.setActiveTimerType(type);
     console.log('Clicked! inside short time selection');
   }
 
-  tapLongTimerTimeSelectionBtn() {
-    this.setActiveTimerType('long');
+  tapLongTimerTimeSelectionBtn(type: 'work' | 'long' | 'short') {
+    this.uISrv.setActiveTimerType(type);
     console.log('Clicked! inside long time selection');
   }
-
 
   getDashboardBackgroundStyle(status: string) {
     if (status !== 'running') {
