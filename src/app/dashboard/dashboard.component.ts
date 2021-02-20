@@ -372,16 +372,19 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
 
   tapWorkTimeSelectionBtn(type: 'work' | 'long' | 'short') {
     this.uISrv.setActiveTimerType(type);
+    this.animateTomatozTimer();
     // console.log('Clicked! inside work time selection');
   }
 
   tapShortTimerTimeSelectionBtn(type: 'work' | 'long' | 'short') {
     this.uISrv.setActiveTimerType(type);
+    this.animateTomatozTimer();
     // console.log('Clicked! inside short time selection');
   }
 
   tapLongTimerTimeSelectionBtn(type: 'work' | 'long' | 'short') {
     this.uISrv.setActiveTimerType(type);
+    this.animateTomatozTimer();
     // console.log('Clicked! inside long time selection');
   }
 
