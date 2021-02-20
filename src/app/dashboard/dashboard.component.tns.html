@@ -83,19 +83,19 @@
         alignSelf="center">
         <ng-container>
           <app-digital-clock
-            *ngIf="timerState === 'work'"
+            *ngIf="activeTimerType === 'work'"
             [timer]="workTimer">
           </app-digital-clock>
         </ng-container>
         <ng-container>
           <app-digital-clock
-            *ngIf="timerState === 'short'"
+            *ngIf="activeTimerType === 'short'"
             [timer]="shortBreakTimer">
           </app-digital-clock>
         </ng-container>
         <ng-container>
           <app-digital-clock
-            *ngIf="timerState === 'long'"
+            *ngIf="activeTimerType === 'long'"
             [timer]="longBreakTimer">
           </app-digital-clock>
         </ng-container>
@@ -133,8 +133,8 @@
           appTouchScale
           (started)="onStarted()"
           (paused)="onPaused()"
-          [showPause]="status === 'running'"
-          [showStart]="status !== 'running'"
+          [showPause]="isPauseShown()"
+          [showStart]="isStartShown()"
           [timerType]="activeTimerType">
         </app-controls>
       </FlexboxLayout>
@@ -145,19 +145,19 @@
         alignItems="center"
         class="timer-type-buttons timer-type-selector">
         <Button
-          [isEnabled]="status !== 'running'"
+          [isEnabled]="isControlBtnEnabled()"
           [ngClass]="getTimerBtnStyle('long', status)"
           text="30"
           (tap)="tapLongTimerTimeSelectionBtn('long')">
         </Button>
         <Button
-          [isEnabled]="status !== 'running'"
+          [isEnabled]="isControlBtnEnabled()"
           [ngClass]="getTimerBtnStyle('work', status)"
           text="25"
           (tap)="tapWorkTimeSelectionBtn('work')">
         </Button>
         <Button
-          [isEnabled]="status !== 'running'"
+          [isEnabled]="isControlBtnEnabled()"
           [ngClass]="getTimerBtnStyle('short', status)"
           text="5"
           (tap)="tapShortTimerTimeSelectionBtn('short')">

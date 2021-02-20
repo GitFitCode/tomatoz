@@ -25,12 +25,7 @@
   color: #43FFe2;
 }
 
-.short-ready {
-  border-color: #3366FF;
-  color: #3366FF;
-}
-
-.long-ready {
+.short-ready, .long-ready{
   border-color: #3366FF;
   color: #3366FF;
 }
@@ -39,4 +34,9 @@
   border-color: #FF4866;
   background-color: #FF4866;
   color: #FFFFFF
+}
+
+.short-paused, .long-paused {
+  border-color: #3366FF;
+  color: #3366FF;
 }

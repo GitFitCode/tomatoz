@@ -37,7 +37,13 @@ export class ControlsComponent implements OnInit {
   }
 
   getPausedControlBtnStyle() {
-    return 'control-btn paused';
+    if (this.timerType === 'work') {
+      return 'control-btn paused';
+    } else if (this.timerType === 'short') {
+      return 'control-btn short-paused';
+    } else if (this.timerType === 'long') {
+      return 'control-btn long-paused';
+    }
   }
 
   onStartedClicked() {

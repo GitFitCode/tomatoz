@@ -21,9 +21,16 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
   tomatozTimerAnimation: Animation = null;
   tomatozTimerAnimationDefinition: AnimationDefinition;
   tomatozTimerViewEl;
+
   remainingTime$: Observable<number>;
   remainingTimeSub: Subscription;
+  shortBreakRemainingTimeSub: Subscription;
+  longBreakRemainingTimeSub: Subscription;
+
   remainingTime;
+  shortBreakRemainingTime;
+  longBreakRemainingTime;
+
   rotationValue;
   rotationFromStart;
 
@@ -40,6 +47,14 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
   workTimerState$: Observable<state>;
   workTimerState;
   workTimerStateSub: Subscription;
+
+  shortBreakTimerState$: Observable<state>;
+  shortBreakTimerState;
+  shortBreakTimerStateSub: Subscription;
+
+  longBreakTimerState$: Observable<state>;
+  longBreakTimerState;
+  longBreakTimerStateSub: Subscription;
 
   showMenuOptions: boolean = false;
   menuOptions: any[] = [
@@ -75,9 +90,16 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
     this.longBreakTimer = this.tomatozSrv.longBreakTimer;
 
     this.workTimerState$ = this.workTimer.getStateObservable();
+    this.shortBreakTimerState$ = this.shortBreakTimer.getStateObservable();
+    this.longBreakTimerState$ = this.longBreakTimer.getStateObservable();
+
     this.getWorkTimerStateSub();
+    this.getShortBreakTimerStateSub();
+    this.getLongBreakTimerStateSub();
     this.getCurrentTimerState();
     this.getTimeRemaining();
+    this.getLongBreakRemainingTime();
+    this.getShortBreakRemainingTime();
     this.tomatozSrv.reloadSettings();
   }
 
@@ -91,7 +113,6 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((type) => {
         this.activeTimerType = type;
-        console.log('After init type', type)
     });
   }
 
@@ -111,11 +132,40 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
       .getTimeRemainingObservable()
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((remainingTime: any) => {
-        this.remainingTime = remainingTime;
-        this.rotationValue = this.remainingTime / 1500000 * 360;
-        this.rotationFromStart = (360 - this.rotationValue);
+        if (this.activeTimerType === 'work') {
+          this.remainingTime = remainingTime;
+          this.rotationValue = this.remainingTime / 1500000 * 360;
+          this.rotationFromStart = (360 - this.rotationValue);
+        }
         // console.log(`rotationValue:: ${this.rotationValue}, remainingTime:: ${remainingTime}, rotationFromStart:: ${this.rotationFromStart}`);
       });
+  }
+
+  getShortBreakRemainingTime() {
+    this.shortBreakRemainingTimeSub = this.shortBreakTimer
+      .getTimeRemainingObservable()
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe((shortBreakRemainingTime) => {
+        if (this.activeTimerType === 'short') {
+          this.shortBreakRemainingTime = shortBreakRemainingTime;
+          // console.log(`short remaining ${shortBreakRemainingTime}`)
+          this.rotationValue = (this.shortBreakRemainingTime / 300000 )* 360;
+          this.rotationFromStart = (360 - this.rotationValue);
+        }
+      });
+  }
+
+  getLongBreakRemainingTime() {
+    this.longBreakRemainingTimeSub = this.longBreakTimer
+    .getTimeRemainingObservable()
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe((longBreakRemainingTime) => {
+      if (this.activeTimerType === 'long') {
+        this.longBreakRemainingTime = longBreakRemainingTime;
+        this.rotationValue = this.longBreakRemainingTime / 1800000 * 360;
+        this.rotationFromStart = (360 - this.rotationValue);
+      }
+    });
   }
 
   getWorkTimerStateSub() {
@@ -126,8 +176,24 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
       });
   }
 
+  getShortBreakTimerStateSub() {
+    this.shortBreakTimerStateSub = this.shortBreakTimerState$
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(shortTimerState => {
+        this.shortBreakTimerState = shortTimerState;
+      });
+  }
+
+  getLongBreakTimerStateSub() {
+    this.longBreakTimerStateSub = this.longBreakTimerState$
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(longTimerState => {
+        this.longBreakTimerState = longTimerState;
+      });
+  }
+
   setActiveTimerType(state: 'work' | 'short' | 'long') {
-        console.log(`State: ${state}, activeBtn ${this.activeTimerType}`)
+    // console.log(`State: ${state}, activeBtn ${this.activeTimerType}`)
     switch(state) {
       case 'work':
         this.activeTimerType = 'work';
@@ -141,9 +207,26 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
 
   animateTomatozTimer() {
     this.tomatozTimerViewEl = this.tomatozTimer.nativeElement;
-    const continueAnimation = (
-      this.workTimerState === 'running' ||
-      this.workTimerState === 'ready'
+    const continueWorkAnimation = (
+      this.activeTimerType === 'work' &&
+      (
+        this.workTimerState === 'running' ||
+        this.workTimerState === 'ready'
+      )
+    ) ? true : false;
+    const continueShortTimerAnimation = (
+      this.activeTimerType === 'short' &&
+      (
+        this.shortBreakTimerState === 'running' ||
+        this.shortBreakTimerState === 'ready'
+      )
+    ) ? true : false;
+    const continueLongTimerAnimation = (
+      this.activeTimerType === 'long' &&
+      (
+        this.longBreakTimerState === 'running' ||
+        this.longBreakTimerState === 'ready'
+      )
     ) ? true : false;
     this.tomatozTimerAnimationDefinition = {
       rotate: this.rotationFromStart,
@@ -153,7 +236,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
     this.tomatozTimerAnimation = new Animation([
       this.tomatozTimerAnimationDefinition
     ]);
-    if (continueAnimation) {
+    if (continueWorkAnimation || continueShortTimerAnimation || continueLongTimerAnimation) {
       this.tomatozTimerAnimation.play()
         .then(() => {
           setTimeout(() => {
@@ -172,18 +255,89 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   onStarted() {
-    this.workTimer.start();
+    if (this.activeTimerType === 'work') {
+      this.workTimer.start();
+    } else if (this.activeTimerType === 'short') {
+      this.shortBreakTimer.start();
+    } else if (this.activeTimerType === 'long') {
+      this.longBreakTimer.start();
+    }
     this.animateTomatozTimer();
   }
 
   onPaused() {
-    this.workTimer.paused();
+    if (this.activeTimerType === 'work') {
+      this.workTimer.paused();
+    } else if (this.activeTimerType === 'short') {
+      this.shortBreakTimer.paused();
+    } else if (this.activeTimerType === 'long') {
+      this.longBreakTimer.paused();
+    }
   }
 
   onStopped() {
-    this.workTimer.reset();
+    if (this.activeTimerType === 'work') {
+      this.workTimer.reset();
+    } else if (this.activeTimerType === 'short') {
+      this.shortBreakTimer.reset();
+    } else if (this.activeTimerType === 'long') {
+      this.longBreakTimer.reset();
+    }
     this.animateTomatozTimer();
+  }
 
+  isPauseShown() {
+    let isShown = false;
+    if (this.activeTimerType === 'work') {
+      if (this.workTimerState === 'running') {
+        isShown = true;
+      }
+    } else if (this.activeTimerType === 'short') {
+      if (this.shortBreakTimerState === 'running') {
+        isShown = true;
+      }
+    } else if (this.activeTimerType === 'long') {
+      if (this.longBreakTimerState === 'running') {
+        isShown = true;
+      }
+    }
+    return isShown;
+  }
+
+  isStartShown() {
+    let isShown = false;
+    if (this.activeTimerType === 'work') {
+      if (this.workTimerState !== 'running') {
+        isShown = true;
+      }
+    } else if (this.activeTimerType === 'short') {
+      if (this.shortBreakTimerState !== 'running') {
+        isShown = true;
+      }
+    } else if (this.activeTimerType === 'long') {
+      if (this.longBreakTimerState !== 'running') {
+        isShown = true;
+      }
+    }
+    return isShown;
+  }
+
+  isControlBtnEnabled() {
+    let isShown = false;
+    if (this.activeTimerType === 'work') {
+      if (this.workTimerState === 'ready') {
+        isShown = true;
+      }
+    } else if (this.activeTimerType === 'short') {
+      if (this.shortBreakTimerState === 'ready') {
+        isShown = true;
+      }
+    } else if (this.activeTimerType === 'long') {
+      if (this.longBreakTimerState === 'ready') {
+        isShown = true;
+      }
+    }
+    return isShown;
   }
 
   getStoppedControlBtnStyle() {
@@ -192,7 +346,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
 
   getTimerBtnStyle(type?, state?) {
     // console.log(`TYPE: ${type}, state: ${state}, timerType:: ${this.activeTimerType}` )
-    console.log(`TIMETYPE ${this.activeTimerType}`)
+    // console.log(`TIMETYPE ${this.activeTimerType}`)
     if (type === 'work' && this.activeTimerType === 'work') {
       if (state === 'ready') {
         return 'timer-type-work-ready';
@@ -218,17 +372,17 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
 
   tapWorkTimeSelectionBtn(type: 'work' | 'long' | 'short') {
     this.uISrv.setActiveTimerType(type);
-    console.log('Clicked! inside work time selection');
+    // console.log('Clicked! inside work time selection');
   }
 
   tapShortTimerTimeSelectionBtn(type: 'work' | 'long' | 'short') {
     this.uISrv.setActiveTimerType(type);
-    console.log('Clicked! inside short time selection');
+    // console.log('Clicked! inside short time selection');
   }
 
   tapLongTimerTimeSelectionBtn(type: 'work' | 'long' | 'short') {
     this.uISrv.setActiveTimerType(type);
-    console.log('Clicked! inside long time selection');
+    // console.log('Clicked! inside long time selection');
   }
 
   getDashboardBackgroundStyle(status: string) {
