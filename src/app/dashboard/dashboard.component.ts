@@ -3,7 +3,7 @@ import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild, ElementRef,
 import { Observable, Subject, Subscription } from 'rxjs';
 import { TomatozService } from '../shared/services/tomatoz.service';
 import { state, Timer } from '../timer';
-import { AnimationDefinition, Color, EventData, FlexboxLayout, fromObject, Page, Screen, Enums, Animation } from '@nativescript/core';
+import { AnimationDefinition, Color, EventData, FlexboxLayout, fromObject, Page, Screen, Enums, Animation, SwipeGestureEventData } from '@nativescript/core';
 import { UIService } from '../shared/services/ui.service';
 
 @Component({
@@ -427,7 +427,16 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.showMenuOptions) {
       return '117';
     } else {
-      return '100%'
+      return '100%';
+    }
+  }
+
+  onSwipeMainCard(args: SwipeGestureEventData) {
+    const swipeDirection = args.direction;
+    if (swipeDirection === 8) {
+      this.showMenuOptions = true;
+    } else if (swipeDirection === 4) {
+      this.showMenuOptions = false;
     }
   }
 

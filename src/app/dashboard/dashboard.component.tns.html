@@ -15,12 +15,15 @@
         justifyContent="space-between"
         [ngClass]="getSettingsBackdropStyle(status)"
         height="76"
-        backgroundColor="transparent">
+        backgroundColor="transparent"
+        (swipe)="onSwipeMainCard($event)">
         <StackLayout
           appTouchScale
           *ngIf="!showMenuOptions"
           backgroundColor="transparent"
-          (tap)="onClickMenuIcon()">
+          (tap)="onClickMenuIcon()"
+          width="30"
+          height="35">
           <SVGImage
             backgroundColor="transparent"
             src="~/assets/tz-assets/asset-1.svg"
@@ -32,7 +35,9 @@
           appTouchScale
           *ngIf="showMenuOptions"
           backgroundColor="transparent"
-          (tap)="onClickMenuIcon()">
+          (tap)="onClickMenuIcon()"
+          width="30"
+          height="35">
           <SVGImage
             backgroundColor="transparent"
             src="~/assets/tz-assets/dashboard-icon.svg"
@@ -42,7 +47,9 @@
         </StackLayout>
         <StackLayout
           appTouchScale
-          backgroundColor="transparent">
+          backgroundColor="transparent"
+          width="30"
+          height="35">
           <SVGImage
             backgroundColor="transparent"
             src="~/assets/tz-assets/options.svg"
@@ -75,6 +82,7 @@
       [height]="calcTimerWrapper()"
       justifyContent="space-between"
       alignItems="stretch"
+      (swipe)="onSwipeMainCard($event)"
       [ngClass]="'dark-bg dashboard-card-container'">
       <FlexboxLayout
         [ngClass]="'digital-clock'"
