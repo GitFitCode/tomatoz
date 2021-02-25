@@ -157,10 +157,12 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    this.cdRef.detectChanges();
     this.activeTimerTypeSub = this.uISrv.activeTimerType
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((type) => {
         this.activeTimerType = type;
+        this.cdRef.detectChanges();
     });
   }
 
