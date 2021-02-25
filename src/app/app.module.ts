@@ -12,8 +12,6 @@ import { SettingsComponent } from '@src/app/dashboard/settings/settings.componen
 import { ControlsComponent } from '@src/app/dashboard/controls/controls.component';
 import { TouchScaleDirective } from './shared/directives/touch-scale.directive';
 
-
-
 @NgModule({
   declarations: [
     AppComponent,

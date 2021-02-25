@@ -3,8 +3,14 @@ import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild, ElementRef,
 import { Observable, Subject, Subscription } from 'rxjs';
 import { TomatozService } from '../shared/services/tomatoz.service';
 import { state, Timer } from '../timer';
-import { AnimationDefinition, Color, EventData, FlexboxLayout, fromObject, Page, Screen, Enums, Animation, SwipeGestureEventData } from '@nativescript/core';
+import { Color, EventData, FlexboxLayout, fromObject, Page, Screen, Enums, SwipeGestureEventData } from '@nativescript/core';
+import {
+  Animation,
+  AnimationDefinition,
+  Pair // Pair: Defines a pair of values (horizontal and vertical) for translate and scale animations.
+} from "@nativescript/core/ui/animation";
 import { UIService } from '../shared/services/ui.service';
+import { UtilityService } from '../shared/services/util.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -80,7 +86,8 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
   constructor(
     private tomatozSrv: TomatozService,
     private cdRef: ChangeDetectorRef,
-    private uISrv: UIService
+    private uISrv: UIService,
+    private utilSrv: UtilityService
   ) {  }
 
   ngOnInit(): void {
@@ -149,8 +156,9 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
         if (this.activeTimerType === 'short') {
           this.shortBreakRemainingTime = shortBreakRemainingTime;
           // console.log(`short remaining ${shortBreakRemainingTime}`)
-          this.rotationValue = (this.shortBreakRemainingTime / 300000 )* 360;
-          this.rotationFromStart = (360 - this.rotationValue);
+          this.rotationValue = (this.shortBreakRemainingTime / this.utilSrv.convertToMilliseconds({ mins: 5 }) )* 360;
+          this.rotationFromStart = (360 - this.rotationValue)
+          console.log(`rotationFromStart ${this.rotationFromStart}`)
         }
       });
   }
@@ -229,25 +237,34 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
       )
     ) ? true : false;
     this.tomatozTimerAnimationDefinition = {
-      rotate: this.rotationFromStart,
-      duration: 60,
-      target:  this.tomatozTimerViewEl
+      rotate: {
+        x: 0,
+        y: 0,
+        z: this.rotationFromStart
+      },
+      duration: 100,
+      target:  this.tomatozTimerViewEl,
+      iterations: Number.POSITIVE_INFINITY,
     };
-    this.tomatozTimerAnimation = new Animation([
+    this.tomatozTimerAnimation = this.getTomatozSvgAnimation([
       this.tomatozTimerAnimationDefinition
     ]);
     if (continueWorkAnimation || continueShortTimerAnimation || continueLongTimerAnimation) {
-      this.tomatozTimerAnimation.play()
-        .then(() => {
-          setTimeout(() => {
-            this.animateTomatozTimer();
-          }, 0);
-          // console.log(`rotationValue:: ${this.rotationValue}, remainingTime:: ${this.remainingTime}, rotationFromStart:: ${this.rotationFromStart}`);
-        })
-        .catch((e) => {
-          console.log(e.message);
-        });
+
+      this.tomatozTimerViewEl.animate({
+        rotate: this.rotationFromStart,
+      }).then(() => {
+        return this.animateTomatozTimer();
+      })
     }
+  }
+
+
+
+  getTomatozSvgAnimation(definitions: AnimationDefinition[]) {
+    return new Animation([
+      ...definitions
+    ]);
   }
 
   onStateChange(currentState: 'work' | 'short' | 'long' ) {
@@ -372,19 +389,19 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
 
   tapWorkTimeSelectionBtn(type: 'work' | 'long' | 'short') {
     this.uISrv.setActiveTimerType(type);
-    this.animateTomatozTimer();
+    //this.animateTomatozTimer();
     // console.log('Clicked! inside work time selection');
   }
 
   tapShortTimerTimeSelectionBtn(type: 'work' | 'long' | 'short') {
     this.uISrv.setActiveTimerType(type);
-    this.animateTomatozTimer();
+    //this.animateTomatozTimer();
     // console.log('Clicked! inside short time selection');
   }
 
   tapLongTimerTimeSelectionBtn(type: 'work' | 'long' | 'short') {
     this.uISrv.setActiveTimerType(type);
-    this.animateTomatozTimer();
+    //this.animateTomatozTimer();
     // console.log('Clicked! inside long time selection');
   }
 
