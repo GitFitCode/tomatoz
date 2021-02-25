@@ -37,6 +37,7 @@
 .dashboard-card-container {
   border-top-left-radius: 40;
   border-top-right-radius: 40;
+  position: relative;
 }
 
 .app-description {
@@ -64,6 +65,10 @@
   font-weight: 200;
   color: #FFFFFF;
   background-color: transparent;
+}
+
+.timer-type-selector-container {
+  height: 145;
 }
 
 .timer-type-buttons {
@@ -112,4 +117,35 @@
 .timer-type-selector-btn-unselected {
   background-color: #101426;
   border-color:#464749;
+}
+
+.hidden {
+  opacity: 0;
+}
+
+.picker {
+  background-color: #101426;
+  border-color: #464749;
+  width: 55;
+  height: 145;
+  vertical-align: middle;
+  font-size: 20;
+  margin: 10;
+  border-width: 1;
+  color: #FFFFFF;
+  padding: 8;
+  border-radius: 10;
+  text-transform: capitalize;
+  font-family: "filson-soft",sans-serif;
+  font-display: auto;
+  font-style: normal;
+  font-weight: 500;
+}
+
+.position-abs {
+  position: absolute;
+}
+
+.position-rel {
+  position: relative;
 }

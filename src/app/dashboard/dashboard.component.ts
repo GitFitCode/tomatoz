@@ -3,7 +3,7 @@ import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild, ElementRef,
 import { Observable, Subject, Subscription } from 'rxjs';
 import { TomatozService } from '../shared/services/tomatoz.service';
 import { state, Timer } from '../timer';
-import { Color, EventData, FlexboxLayout, fromObject, Page, Screen, Enums, SwipeGestureEventData } from '@nativescript/core';
+import { Color, EventData, FlexboxLayout, fromObject, Page, Screen, Enums, SwipeGestureEventData, GestureEventData, GestureTypes, ListPicker, TouchGestureEventData } from '@nativescript/core';
 import {
   Animation,
   AnimationDefinition,
@@ -24,6 +24,18 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
   timerWrapper: ElementRef;
   @ViewChild('tomatozTimer')
   tomatozTimer: ElementRef;
+
+  @ViewChild('workTimerSelectionBtnWapper')
+  workTimerSelectionBtnWapper: ElementRef;
+
+  workTimerSelectionBtnWapperViewEl;
+
+  @ViewChild('workTimerSelectionBtn')
+  workTimerSelectionBtn: ElementRef;
+
+  @ViewChild('workTimerPicker')
+  workTimerPicker: ElementRef;
+
   tomatozTimerAnimation: Animation = null;
   tomatozTimerAnimationDefinition: AnimationDefinition;
   tomatozTimerViewEl;
@@ -83,6 +95,33 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
   activeTimerType: 'work' | 'short' | 'long' = 'work';
   activeTimerType$: Observable<'work' | 'short' | 'long'>;
   activeTimerTypeSub: Subscription;
+
+  public workTimeOptions: Array<number> = Array.from(
+    { length: 60 }, (_, i) => i + 1
+  );
+
+  public shortTimeOptions: Array<number> = Array.from(
+    { length: 60 }, (_, i) => i + 1
+  );
+
+  public longTimeOptions: Array<number> = Array.from(
+    { length: 60 }, (_, i) => i + 1
+  );
+
+
+  selectedWorkTimeDuration: number = 25;
+  selectedWorkTimeDurationIndex: number = 24;
+  isShowingWorkTimerSelectionPicker: boolean = false;
+
+
+  selectedShortTimeDuration: number = 5;
+  selectedShortTimeDurationIndex: number = 4;
+  isShowingShortTimerSelectionPicker: boolean = false;
+
+  selectedLongTimeDuration: number = 30;
+  selectedLongTimeDurationIndex: number = 29;
+  isShowingLongTimerSelectionPicker: boolean = false;
+
   constructor(
     private tomatozSrv: TomatozService,
     private cdRef: ChangeDetectorRef,
@@ -108,6 +147,8 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
     this.getLongBreakRemainingTime();
     this.getShortBreakRemainingTime();
     this.tomatozSrv.reloadSettings();
+
+    this.workTimerSelectionBtnWapperViewEl = this.workTimerSelectionBtnWapper.nativeElement;
   }
 
   ngOnDestroy(): void {
@@ -259,8 +300,6 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-
-
   getTomatozSvgAnimation(definitions: AnimationDefinition[]) {
     return new Animation([
       ...definitions
@@ -366,19 +405,31 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
     // console.log(`TIMETYPE ${this.activeTimerType}`)
     if (type === 'work' && this.activeTimerType === 'work') {
       if (state === 'ready') {
-        return 'timer-type-work-ready';
+        if (this.isShowingWorkTimerSelectionPicker) {
+          return 'hidden';
+        } else {
+          return 'timer-type-work-ready';
+        }
       } else {
         return 'timer-type-disabled';
       }
     } else if (type === 'short' && this.activeTimerType === 'short') {
       if (state === 'ready') {
-        return 'timer-type-short-ready';
+        if (this.isShowingShortTimerSelectionPicker) {
+          return 'hidden';
+        } else {
+          return 'timer-type-short-ready';
+        }
       } else {
         return 'timer-type-disabled';
       }
     }  else if (type === 'long' && this.activeTimerType === 'long') {
       if (state === 'ready') {
-        return 'timer-type-long-ready';
+        if (this.isShowingLongTimerSelectionPicker) {
+          return 'hidden';
+        } else {
+          return 'timer-type-long-ready';
+        }
       } else {
         return 'timer-type-disabled';
       }
@@ -389,20 +440,71 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
 
   tapWorkTimeSelectionBtn(type: 'work' | 'long' | 'short') {
     this.uISrv.setActiveTimerType(type);
-    //this.animateTomatozTimer();
-    // console.log('Clicked! inside work time selection');
   }
 
   tapShortTimerTimeSelectionBtn(type: 'work' | 'long' | 'short') {
     this.uISrv.setActiveTimerType(type);
-    //this.animateTomatozTimer();
-    // console.log('Clicked! inside short time selection');
   }
 
   tapLongTimerTimeSelectionBtn(type: 'work' | 'long' | 'short') {
     this.uISrv.setActiveTimerType(type);
-    //this.animateTomatozTimer();
-    // console.log('Clicked! inside long time selection');
+  }
+
+  onLongPressWorkTimerSelectionBtn(args: GestureEventData, item) {
+    this.isShowingWorkTimerSelectionPicker = true;
+    setTimeout(() => {
+      this.isShowingWorkTimerSelectionPicker = false;
+    }, 3000);
+  }
+
+  onLongPressShortTimerSelectionBtn(args: GestureEventData, item) {
+    this.isShowingShortTimerSelectionPicker = true;
+    setTimeout(() => {
+      this.isShowingShortTimerSelectionPicker = false;
+    }, 3000);
+  }
+
+  onLongPressLongTimerSelectionBtn(args: GestureEventData, item) {
+    this.isShowingWorkTimerSelectionPicker = true;
+    setTimeout(() => {
+      this.isShowingWorkTimerSelectionPicker = false;
+    }, 3000);
+  }
+
+
+  //onTouch(args: TouchGestureEventData) {
+
+  //  console.log("activePointers: " + args.getActivePointers().length);
+  //  if(args.action === "down") {
+  //    this.start = new Date().getMilliseconds();
+  //    this.isShowingWorkTimerSelectionPicker = true;
+  //  }
+  //  if(args.action === "up") {
+  //    this.end = new Date().getMilliseconds();
+  //    const duration = Math.abs(this.start - this.end)
+  //    console.log(duration > 150? "long press": "tap");
+  //    setTimeout(() => {
+  //      this.isShowingWorkTimerSelectionPicker = false;
+  //    }, 3000);
+  //  }
+  //}
+
+  public onSelectedWorkTimeIndexChanged(args: EventData) {
+    const picker = <ListPicker>args.object;
+    this.selectedWorkTimeDuration = this.workTimeOptions[picker.selectedIndex];
+    this.selectedWorkTimeDurationIndex = picker.selectedIndex;
+  }
+
+  public onSelectedShortTimeIndexChanged(args: EventData) {
+    const picker = <ListPicker>args.object;
+    this.selectedShortTimeDuration = this.shortTimeOptions[picker.selectedIndex];
+    this.selectedShortTimeDurationIndex = picker.selectedIndex;
+  }
+
+  public onSelectedLongTimeIndexChanged(args: EventData) {
+    const picker = <ListPicker>args.object;
+    this.selectedLongTimeDuration = this.longTimeOptions[picker.selectedIndex];
+    this.selectedLongTimeDurationIndex = picker.selectedIndex;
   }
 
   getDashboardBackgroundStyle(status: string) {
@@ -453,11 +555,19 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
 
   onSwipeMainCard(args: SwipeGestureEventData) {
     const swipeDirection = args.direction;
-    if (swipeDirection === 8) {
+    if (swipeDirection === 8 && !this.isShowingTimeDurationPickers()) {
       this.showMenuOptions = true;
     } else if (swipeDirection === 4) {
       this.showMenuOptions = false;
     }
+  }
+
+  isShowingTimeDurationPickers() {
+    return (
+      this.isShowingWorkTimerSelectionPicker ||
+      this.isShowingLongTimerSelectionPicker ||
+      this.isShowingShortTimerSelectionPicker
+    )
   }
 
   onClickMenuIcon() {
