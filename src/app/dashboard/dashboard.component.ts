@@ -148,7 +148,6 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
     this.getShortBreakRemainingTime();
     this.tomatozSrv.reloadSettings();
 
-    this.workTimerSelectionBtnWapperViewEl = this.workTimerSelectionBtnWapper.nativeElement;
   }
 
   ngOnDestroy(): void {
@@ -467,29 +466,11 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   onLongPressLongTimerSelectionBtn(args: GestureEventData, item) {
-    this.isShowingWorkTimerSelectionPicker = true;
+    this.isShowingLongTimerSelectionPicker = true;
     setTimeout(() => {
-      this.isShowingWorkTimerSelectionPicker = false;
+      this.isShowingLongTimerSelectionPicker = false;
     }, 3000);
   }
-
-
-  //onTouch(args: TouchGestureEventData) {
-
-  //  console.log("activePointers: " + args.getActivePointers().length);
-  //  if(args.action === "down") {
-  //    this.start = new Date().getMilliseconds();
-  //    this.isShowingWorkTimerSelectionPicker = true;
-  //  }
-  //  if(args.action === "up") {
-  //    this.end = new Date().getMilliseconds();
-  //    const duration = Math.abs(this.start - this.end)
-  //    console.log(duration > 150? "long press": "tap");
-  //    setTimeout(() => {
-  //      this.isShowingWorkTimerSelectionPicker = false;
-  //    }, 3000);
-  //  }
-  //}
 
   public onSelectedWorkTimeIndexChanged(args: EventData) {
     const picker = <ListPicker>args.object;
