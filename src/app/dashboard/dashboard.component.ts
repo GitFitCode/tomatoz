@@ -9,8 +9,15 @@ import {
   AnimationDefinition,
   Pair // Pair: Defines a pair of values (horizontal and vertical) for translate and scale animations.
 } from "@nativescript/core/ui/animation";
+import { Store } from '@ngrx/store';
+
 import { UIService } from '../shared/services/ui.service';
 import { UtilityService } from '../shared/services/util.service';
+import * as fromApp from './../store/app.reducer';
+import * as fromSettingsActions from './settings/store/settings.actions';
+import * as fromSettingsSelectors from './settings/store/settings.selectors';
+import { AnimationCurve } from '@nativescript/core/ui/enums';
+
 
 @Component({
   selector: 'app-dashboard',
@@ -122,11 +129,18 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
   selectedLongTimeDurationIndex: number = 29;
   isShowingLongTimerSelectionPicker: boolean = false;
 
+  private workTimerDurationSub: Subscription;
+
+  private shortBreakTimerDurationSub: Subscription;
+
+  private longBreakTimerDurationSub:  Subscription;
+
   constructor(
     private tomatozSrv: TomatozService,
     private cdRef: ChangeDetectorRef,
     private uISrv: UIService,
-    private utilSrv: UtilityService
+    private utilSrv: UtilityService,
+    private store: Store<fromApp.AppState>,
   ) {  }
 
   ngOnInit(): void {
@@ -138,7 +152,9 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
     this.workTimerState$ = this.workTimer.getStateObservable();
     this.shortBreakTimerState$ = this.shortBreakTimer.getStateObservable();
     this.longBreakTimerState$ = this.longBreakTimer.getStateObservable();
-
+    this.setWorkTimerDurationSub();
+    this.setShortBreakTimerDurationSub();
+    this.setLongBreakTimerDurationSub();
     this.getWorkTimerStateSub();
     this.getShortBreakTimerStateSub();
     this.getLongBreakTimerStateSub();
@@ -183,10 +199,34 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
       .subscribe((remainingTime: any) => {
         if (this.activeTimerType === 'work') {
           this.remainingTime = remainingTime;
-          this.rotationValue = this.remainingTime / 1500000 * 360;
+          this.rotationValue = this.remainingTime / this.utilSrv.convertToMilliseconds({ mins: this.selectedWorkTimeDuration }) * 360;
           this.rotationFromStart = (360 - this.rotationValue);
         }
         // console.log(`rotationValue:: ${this.rotationValue}, remainingTime:: ${remainingTime}, rotationFromStart:: ${this.rotationFromStart}`);
+      });
+  }
+
+  setWorkTimerDurationSub() {
+    this.workTimerDurationSub = this.store.select(fromSettingsSelectors.selectWorkTimerDuration)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(wDuration => {
+        this.selectedWorkTimeDuration = wDuration;
+      });
+  }
+
+  setShortBreakTimerDurationSub() {
+    this.shortBreakTimerDurationSub = this.store.select(fromSettingsSelectors.selectShortBreakTimerDuration)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(sDuration => {
+        this.selectedShortTimeDuration = sDuration;
+      });
+  }
+
+  setLongBreakTimerDurationSub() {
+    this.longBreakTimerDurationSub = this.store.select(fromSettingsSelectors.selectLongBreakTimerDuration)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(lDuration => {
+        this.selectedLongTimeDuration = lDuration;
       });
   }
 
@@ -198,7 +238,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
         if (this.activeTimerType === 'short') {
           this.shortBreakRemainingTime = shortBreakRemainingTime;
           // console.log(`short remaining ${shortBreakRemainingTime}`)
-          this.rotationValue = (this.shortBreakRemainingTime / this.utilSrv.convertToMilliseconds({ mins: 5 }) )* 360;
+          this.rotationValue = (this.shortBreakRemainingTime / this.utilSrv.convertToMilliseconds({ mins: this.selectedShortTimeDuration }) )* 360;
           this.rotationFromStart = (360 - this.rotationValue)
           console.log(`rotationFromStart ${this.rotationFromStart}`)
         }
@@ -212,7 +252,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
     .subscribe((longBreakRemainingTime) => {
       if (this.activeTimerType === 'long') {
         this.longBreakRemainingTime = longBreakRemainingTime;
-        this.rotationValue = this.longBreakRemainingTime / 1800000 * 360;
+        this.rotationValue = this.longBreakRemainingTime / this.utilSrv.convertToMilliseconds({ mins: this.selectedLongTimeDuration })  * 360;
         this.rotationFromStart = (360 - this.rotationValue);
       }
     });
@@ -257,6 +297,33 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
 
   animateTomatozTimer() {
     this.tomatozTimerViewEl = this.tomatozTimer.nativeElement;
+
+    this.tomatozTimerAnimationDefinition = {
+      rotate: {
+        x: 0,
+        y: 0,
+        z: this.rotationFromStart
+      },
+      duration: 1,
+      target:  this.tomatozTimer.nativeElement,
+      iterations: Number.POSITIVE_INFINITY,
+      curve: AnimationCurve.linear
+    };
+    this.tomatozTimerAnimation = this.getTomatozSvgAnimation([
+      this.tomatozTimerAnimationDefinition
+    ]);
+    if (this.shouldContinueAnimation()) {
+      this.tomatozTimer.nativeElement.animate({
+        ...this.tomatozTimerAnimationDefinition
+      }).then(() => {
+        setTimeout(() => {
+          this.animateTomatozTimer();
+        }, 0);
+      });
+    }
+  }
+
+  shouldContinueAnimation() {
     const continueWorkAnimation = (
       this.activeTimerType === 'work' &&
       (
@@ -278,27 +345,11 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
         this.longBreakTimerState === 'ready'
       )
     ) ? true : false;
-    this.tomatozTimerAnimationDefinition = {
-      rotate: {
-        x: 0,
-        y: 0,
-        z: this.rotationFromStart
-      },
-      duration: 100,
-      target:  this.tomatozTimerViewEl,
-      iterations: Number.POSITIVE_INFINITY,
-    };
-    this.tomatozTimerAnimation = this.getTomatozSvgAnimation([
-      this.tomatozTimerAnimationDefinition
-    ]);
-    if (continueWorkAnimation || continueShortTimerAnimation || continueLongTimerAnimation) {
-
-      this.tomatozTimerViewEl.animate({
-        rotate: this.rotationFromStart,
-      }).then(() => {
-        return this.animateTomatozTimer();
-      })
-    }
+      return (
+        continueWorkAnimation ||
+        continueShortTimerAnimation ||
+        continueLongTimerAnimation
+      );
   }
 
   getTomatozSvgAnimation(definitions: AnimationDefinition[]) {
@@ -474,20 +525,42 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public onSelectedWorkTimeIndexChanged(args: EventData) {
     const picker = <ListPicker>args.object;
-    this.selectedWorkTimeDuration = this.workTimeOptions[picker.selectedIndex];
+    //this.selectedWorkTimeDuration = this.workTimeOptions[picker.selectedIndex];
     this.selectedWorkTimeDurationIndex = picker.selectedIndex;
+    this.store.dispatch(fromSettingsActions.setWorkTimerDuration({
+      duration: this.workTimeOptions[picker.selectedIndex]
+    }));
+
+    this.tomatozSrv.workTimer.setCurrentDuration(
+      this.utilSrv.convertToMilliseconds({ mins: this.workTimeOptions[picker.selectedIndex] })
+    );
+    this.tomatozSrv.workTimer.reset();
   }
 
   public onSelectedShortTimeIndexChanged(args: EventData) {
     const picker = <ListPicker>args.object;
-    this.selectedShortTimeDuration = this.shortTimeOptions[picker.selectedIndex];
+    //this.selectedShortTimeDuration = this.shortTimeOptions[picker.selectedIndex];
     this.selectedShortTimeDurationIndex = picker.selectedIndex;
+    this.store.dispatch(fromSettingsActions.setShortTimerDuration({
+      duration: this.shortTimeOptions[picker.selectedIndex]
+    }));
+    this.tomatozSrv.shortBreakTimer.setCurrentDuration(
+      this.utilSrv.convertToMilliseconds({ mins: this.shortTimeOptions[picker.selectedIndex] })
+    );
+    this.tomatozSrv.shortBreakTimer.reset();
   }
 
   public onSelectedLongTimeIndexChanged(args: EventData) {
     const picker = <ListPicker>args.object;
-    this.selectedLongTimeDuration = this.longTimeOptions[picker.selectedIndex];
+    //this.selectedLongTimeDuration = this.longTimeOptions[picker.selectedIndex];
     this.selectedLongTimeDurationIndex = picker.selectedIndex;
+    this.store.dispatch(fromSettingsActions.setLongTimerDuration({
+      duration: this.longTimeOptions[picker.selectedIndex]
+    }));
+    this.tomatozSrv.longBreakTimer.setCurrentDuration(
+      this.utilSrv.convertToMilliseconds({ mins: this.longTimeOptions[picker.selectedIndex] })
+    );
+    this.tomatozSrv.longBreakTimer.reset();
   }
 
   getDashboardBackgroundStyle(status: string) {

@@ -1,8 +1,11 @@
 import { UtilityService } from './util.service';
 import { takeUntil } from 'rxjs/operators';
-import { BehaviorSubject, Subject, Observable, merge } from 'rxjs';
+import { BehaviorSubject, Subject, Observable, merge, Subscription } from 'rxjs';
 import { Timer } from './../../timer';
 import { Injectable, OnDestroy } from '@angular/core';
+import * as fromApp from './../../store/app.reducer';
+import * as fromSettingsSelectors from './../../dashboard/settings/store/settings.selectors';
+import { Store } from '@ngrx/store';
 
 @Injectable({
   providedIn: 'root'
@@ -14,32 +17,60 @@ export class TomatozService implements OnDestroy {
   shortBreakTimer: Timer;
   longBreakTimer: Timer;
   stateSubject = new BehaviorSubject<'work' | 'long' | 'short'>('work');
+
+  private workTimerDurationSub: Subscription;
+  workTimerDuration;
+
+  private shortBreakTimerDurationSub: Subscription;
+  shortBreakTimerDuration;
+
+  private longBreakTimerDurationSub:  Subscription;
+  longBreakTimerDuration;
+
   // This allows us to clean up our observables a lot better
   private ngUnsubscribe = new Subject<void>();
 
   constructor(
-    private utilSrv: UtilityService
+    private utilSrv: UtilityService,
+    private store: Store<fromApp.AppState>,
   ) {
     // Can this just be done via ngOnit?
     this.onWorkTimerComplete = this.onWorkTimerComplete.bind(this);
     this.onShortBreakTimerComplete = this.onShortBreakTimerComplete.bind(this);
     this.onLongBreakTimerComplete = this.onLongBreakTimerComplete.bind(this);
     // TODO: Get timer value from settings storage
+    this.setWorkTimerDurationSub();
+    this.setShortBreakTimerDurationSub();
+    this.setLongBreakTimerDurationSub();
+    this.initializeTimers();
+    this.setTimersCompletionSub();
+  }
+
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
+  }
+
+
+  initializeTimers() {
     this.workTimer = new Timer(
       this.utilSrv.convertToMilliseconds({
-        mins: 25
+        mins: this.workTimerDuration
       })
     );
     this.shortBreakTimer = new Timer(
       this.utilSrv.convertToMilliseconds({
-        mins: 5
+        mins: this.shortBreakTimerDuration
       })
     );
     this.longBreakTimer = new Timer(
       this.utilSrv.convertToMilliseconds({
-        mins: 30
+        mins: this.longBreakTimerDuration
       })
     );
+  }
+
+  setTimersCompletionSub() {
     // Combine our timer observables
     const combindTimerObs$ = [
       this.workTimer,
@@ -58,10 +89,30 @@ export class TomatozService implements OnDestroy {
     combindTimerObs$[2].subscribe(this.onLongBreakTimerComplete);
   }
 
-  ngOnDestroy(): void {
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
+  setWorkTimerDurationSub() {
+    this.workTimerDurationSub = this.store.select(fromSettingsSelectors.selectWorkTimerDuration)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(wDuration => {
+        this.workTimerDuration = wDuration;
+      });
   }
+
+  setShortBreakTimerDurationSub() {
+    this.shortBreakTimerDurationSub = this.store.select(fromSettingsSelectors.selectShortBreakTimerDuration)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(sDuration => {
+        this.shortBreakTimerDuration = sDuration;
+      });
+  }
+
+  setLongBreakTimerDurationSub() {
+    this.longBreakTimerDurationSub = this.store.select(fromSettingsSelectors.selectLongBreakTimerDuration)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(lDuration => {
+        this.longBreakTimerDuration = lDuration;
+      });
+  }
+
 
   onWorkTimerComplete(): void {
     this.workTimer.reset();
@@ -103,13 +154,13 @@ export class TomatozService implements OnDestroy {
   reloadSettings(): void {
     // TODO: Move this into a settings service with defaults
     this.workTimer.setCurrentDuration(
-      this.utilSrv.convertToMilliseconds({ mins: 25 })
+      this.utilSrv.convertToMilliseconds({ mins: this.workTimerDuration })
     );
     this.shortBreakTimer.setCurrentDuration(
-      this.utilSrv.convertToMilliseconds({ mins: 5 })
+      this.utilSrv.convertToMilliseconds({ mins: this.shortBreakTimerDuration })
     );
     this.longBreakTimer.setCurrentDuration(
-      this.utilSrv.convertToMilliseconds({ mins: 30 })
+      this.utilSrv.convertToMilliseconds({ mins: this.longBreakTimerDuration })
     );
   }
 

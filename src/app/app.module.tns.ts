@@ -5,6 +5,7 @@ import { AppRoutingModule } from '@src/app/app-routing.module';
 import { AppComponent } from '@src/app/app.component';
 import { TomatozComponent } from '@src/app/dashboard/tomatoz/tomatoz.component';
 import { DashboardComponent } from '@src/app/dashboard/dashboard.component';
+import * as fromApp from '@src/app/store/app.reducer';
 
 import { NativeScriptSvgModule } from '@sergeymell/nativescript-svg/angular';
 import { DigitalClockComponent } from '@src/app/dashboard/digital-clock/digital-clock.component';
@@ -13,6 +14,7 @@ import { SettingsComponent } from '@src/app/dashboard/settings/settings.componen
 import { NativeScriptFormsModule, NativeScriptHttpClientModule } from '@nativescript/angular';
 import { ControlsComponent } from '@src/app/dashboard/controls/controls.component';
 import { TouchScaleDirective } from './shared/directives/touch-scale.directive';
+import { StoreModule } from '@ngrx/store';
 
 @NgModule({
   declarations: [
@@ -30,6 +32,7 @@ import { TouchScaleDirective } from './shared/directives/touch-scale.directive';
     NativeScriptSvgModule,
     NativeScriptHttpClientModule,
     AppRoutingModule,
+    StoreModule.forRoot(fromApp.appReducer),
   ],
   providers: [],
   bootstrap: [AppComponent],

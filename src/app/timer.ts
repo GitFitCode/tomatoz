@@ -55,7 +55,10 @@ export class Timer {
    */
   reset(): void {
     const timeState = this.stateSubj.value;
-    if (timeState !== 'reset' && timeState !== 'ready') {
+    if (
+      timeState !== 'reset'
+      //timeState !== 'ready'
+    ) {
       this.stateSubj.next('reset');
       this.run$.next(false);
       this.resetSubj.next();
