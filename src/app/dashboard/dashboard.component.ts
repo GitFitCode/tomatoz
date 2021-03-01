@@ -585,14 +585,6 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  getSettingsBackdropStyle(status: string, height?: number) {
-    if (status !== 'running') {
-      return 'timer-ready settings-controls showing-menu-list';
-    } else {
-      return 'timer-running settings-controls showing-menu-list';
-    }
-  }
-
   calcDashboardSplashHeight(): any {
     let calcVal = 76;
     if (this.showMenuOptions) {

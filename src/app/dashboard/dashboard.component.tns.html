@@ -4,61 +4,23 @@
     [backgroundColor]="getDashboardBackgroundStyle(status)"
     alignItems="center"
     *ngIf="workTimerState$ | async as status">
+    <!-- Menu Card -->
     <FlexboxLayout
       #dashboardSplash
       [backgroundColor]="getDashboardBackgroundStyle(status, 800)"
       flexDirection="column"
       alignContent="center"
       [ngStyle]="{'height': calcDashboardSplashHeight() }">
-      <FlexboxLayout
-        flexDirection="row"
-        justifyContent="space-between"
-        [ngClass]="getSettingsBackdropStyle(status)"
-        height="76"
-        backgroundColor="transparent"
-        (swipe)="onSwipeMainCard($event)">
-        <StackLayout
-          appTouchScale
-          *ngIf="!showMenuOptions"
-          backgroundColor="transparent"
-          (tap)="onClickMenuIcon()"
-          width="30"
-          height="35">
-          <SVGImage
-            backgroundColor="transparent"
-            src="~/assets/tz-assets/asset-1.svg"
-            width="30"
-            height="30">
-          </SVGImage>
-        </StackLayout>
-        <StackLayout
-          appTouchScale
-          *ngIf="showMenuOptions"
-          backgroundColor="transparent"
-          (tap)="onClickMenuIcon()"
-          width="30"
-          height="35">
-          <SVGImage
-            backgroundColor="transparent"
-            src="~/assets/tz-assets/dashboard-icon.svg"
-            width="17.5"
-            height="22.5">
-          </SVGImage>
-        </StackLayout>
-        <StackLayout
-          appTouchScale
-          backgroundColor="transparent"
-          width="30"
-          height="35">
-          <SVGImage
-            backgroundColor="transparent"
-            src="~/assets/tz-assets/options.svg"
-            width="22.5"
-            height="4.999"
-            style="margin-top: 5;">
-          </SVGImage>
-        </StackLayout>
-      </FlexboxLayout>
+
+      <!-- Hamburger Menu -->
+      <hamburger-menu
+        [status]="status"
+        [showMenuOptions]="showMenuOptions"
+        (swipedCard)="onSwipeMainCard($event)"
+        (onMenuIconTap)="onClickMenuIcon()">
+      </hamburger-menu>
+
+      <!-- Menu List -->
       <FlexboxLayout
         *ngIf="showMenuOptions"
         flexDirection="column"
@@ -75,7 +37,10 @@
           [text]="opt.label">
         </Label>
       </FlexboxLayout>
+
     </FlexboxLayout>
+
+    <!-- Main Card -->
     <FlexboxLayout
       #timerWrapper
       flexDirection="column"
@@ -84,30 +49,36 @@
       alignItems="stretch"
       (swipe)="onSwipeMainCard($event)"
       [ngClass]="'dark-bg dashboard-card-container'">
+
       <FlexboxLayout
         [ngClass]="'digital-clock'"
         flexDirection="row"
         justifyContent="flex-start"
         alignSelf="center">
+
         <ng-container>
           <app-digital-clock
             *ngIf="activeTimerType === 'work'"
             [timer]="workTimer">
           </app-digital-clock>
         </ng-container>
+
         <ng-container>
           <app-digital-clock
             *ngIf="activeTimerType === 'short'"
             [timer]="shortBreakTimer">
           </app-digital-clock>
         </ng-container>
+
         <ng-container>
           <app-digital-clock
             *ngIf="activeTimerType === 'long'"
             [timer]="longBreakTimer">
           </app-digital-clock>
         </ng-container>
+
       </FlexboxLayout>
+
       <FlexboxLayout
         *ngIf="!showMenuOptions"
         flexDirection="row"

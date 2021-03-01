@@ -15,6 +15,7 @@ import { NativeScriptFormsModule, NativeScriptHttpClientModule } from '@nativesc
 import { ControlsComponent } from '@src/app/dashboard/controls/controls.component';
 import { TouchScaleDirective } from './shared/directives/touch-scale.directive';
 import { StoreModule } from '@ngrx/store';
+import { HamburgerMenuComponent } from '@src/app/dashboard/hamburger-menu/hamburger-menu.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { StoreModule } from '@ngrx/store';
     DigitalClockComponent,
     SettingsComponent,
     ControlsComponent,
-    TouchScaleDirective
+    TouchScaleDirective,
+    HamburgerMenuComponent
   ],
   imports: [
     NativeScriptModule,

@@ -1,0 +1,51 @@
+<FlexboxLayout
+  flexDirection="row"
+  justifyContent="space-between"
+  [ngClass]="getSettingsBackdropStyle()"
+  height="76"
+  backgroundColor="transparent"
+  (swipe)="onSwipeMainCard($event)">
+  <StackLayout
+    appTouchScale
+    *ngIf="!showMenuOptions"
+    backgroundColor="transparent"
+    (tap)="onClickMenuIcon()"
+    width="30"
+    height="35">
+    <SVGImage
+      backgroundColor="transparent"
+      src="~/assets/tz-assets/asset-1.svg"
+      width="30"
+      height="30">
+    </SVGImage>
+  </StackLayout>
+
+  <StackLayout
+    appTouchScale
+    *ngIf="showMenuOptions"
+    backgroundColor="transparent"
+    (tap)="onClickMenuIcon()"
+    width="30"
+    height="35">
+    <SVGImage
+      backgroundColor="transparent"
+      src="~/assets/tz-assets/dashboard-icon.svg"
+      width="17.5"
+      height="22.5">
+    </SVGImage>
+  </StackLayout>
+
+  <StackLayout
+    appTouchScale
+    backgroundColor="transparent"
+    width="30"
+    height="35">
+    <SVGImage
+      backgroundColor="transparent"
+      src="~/assets/tz-assets/options.svg"
+      width="22.5"
+      height="4.999"
+      style="margin-top: 5;">
+    </SVGImage>
+  </StackLayout>
+</FlexboxLayout>
