@@ -6,6 +6,7 @@ import { Injectable, OnDestroy } from '@angular/core';
 import * as fromApp from './../../store/app.reducer';
 import * as fromSettingsSelectors from './../../dashboard/settings/store/settings.selectors';
 import { Store } from '@ngrx/store';
+import { UIService } from './ui.service';
 
 @Injectable({
   providedIn: 'root'
@@ -32,6 +33,7 @@ export class TomatozService implements OnDestroy {
 
   constructor(
     private utilSrv: UtilityService,
+    private uISrv: UIService,
     private store: Store<fromApp.AppState>,
   ) {
     // Can this just be done via ngOnit?
@@ -80,7 +82,7 @@ export class TomatozService implements OnDestroy {
       .map((timer) => {
         return merge(
           timer.getCompletedObservable(),
-          timer.getInterruptedObservable()
+          //timer.getInterruptedObservable()
         ).pipe(takeUntil(this.ngUnsubscribe))
       });
     // Subscribe to all the timers
@@ -121,12 +123,14 @@ export class TomatozService implements OnDestroy {
      * NOTE: We should have a concept of a session
      */
     this.incrementPomodoroCount();
-    // if (this.pomodoros % 4 === 0) {
-    //   // Session of 4 is done, lets do a long break
-    //   this.stateSubject.next('long');
-    // } else {
-    //   this.stateSubject.next('short');
-    // }
+    if (this.pomodoros % 4 === 0) {
+      // Session of 4 is done, lets do a long break
+      this.uISrv.setActiveTimerType('work');
+      this.stateSubject.next('long');
+    } else {
+      this.uISrv.setActiveTimerType('short');
+      this.stateSubject.next('short');
+    }
     // TODO: Notify the user about the work session completion
     // TODO: Determine if there should be a long or short break
   }
@@ -134,12 +138,14 @@ export class TomatozService implements OnDestroy {
   onShortBreakTimerComplete(): void {
     // TODO: Notify user that the break is over
     this.shortBreakTimer.reset();
+    this.uISrv.setActiveTimerType('work');
     this.stateSubject.next('work');
   }
 
   onLongBreakTimerComplete(): void {
     // TODO: Notify user that the break is over
     this.longBreakTimer.reset();
+    this.uISrv.setActiveTimerType('work');
     this.stateSubject.next('work');
   }
 
