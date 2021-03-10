@@ -360,6 +360,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
 
   onStateChange(currentState: 'work' | 'short' | 'long' ) {
     this.cdRef.detectChanges();
+    console.log('state', currentState);
   }
 
   onStarted() {
