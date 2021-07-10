@@ -16,6 +16,7 @@ import { ControlsComponent } from '@src/app/dashboard/controls/controls.componen
 import { TouchScaleDirective } from './shared/directives/touch-scale.directive';
 import { StoreModule } from '@ngrx/store';
 import { HamburgerMenuComponent } from '@src/app/dashboard/hamburger-menu/hamburger-menu.component';
+import {LoginComponent} from './auth/login/login.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { HamburgerMenuComponent } from '@src/app/dashboard/hamburger-menu/hambur
     SettingsComponent,
     ControlsComponent,
     TouchScaleDirective,
-    HamburgerMenuComponent
+    HamburgerMenuComponent,
+    LoginComponent
   ],
   imports: [
     NativeScriptModule,
