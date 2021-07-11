@@ -1,6 +1,6 @@
 # tomatoz
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.1.0.
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.1.0 and uses Node LTS v14.
 
 ## Development server
 
